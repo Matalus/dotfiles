@@ -47,19 +47,20 @@ $ScoopStatus = Get-ScoopPackages -ScoopConfigPath $ScoopConfigPath -PSInfo $Glob
 
 # Setup Symlinks
 # TODO setup symlink handings and move into function
-$SymLinkPath = "$ProfileDir\symlinks.yaml"
-$SymLinks = Get-Content $SymLinkPath | ConvertFrom-Yaml
+$SymLinkConfigPath = "$ProfileDir\symlinks.yaml"
+$SymLinks = Get-Content $SymLinkConfigPath | ConvertFrom-Yaml
 
 ForEach ($Symlink in $SymLinks.Symlinks) {
   # Check if path exists 
   $SymLinkPath = $ExecutionContext.InvokeCommand.ExpandString($Symlink.target)
+  $SymLinkSource = "$ProfileDir\$($Symlink.source)"
   Write-Host "Checking Symlink: $($SymLinkPath):" -ForegroundColor White -NoNewline
   $TestTarget = Test-Path $SymLinkPath
   
   if ($TestTarget) {
     # check if symlink already exists
     $SymLinkExists = Get-Item $SymLinkPath -ErrorAction SilentlyContinue | Where-Object { $_.Attributes -match "ReparsePoint" } 
-  | Where-Object { $_.FullName -eq $SymLinkPath -and $_.Target -eq $Symlink.Source }
+  | Where-Object { $_.FullName -eq $SymLinkPath -and $_.Target -eq $SymLinkSource }
     if ($SymLinkExists) {
       Write-Host -ForegroundColor Green " OK"
     }
@@ -80,8 +81,8 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
   else {
     Write-Host -ForegroundColor Yellow " missing"
     # Create Missing Symlinks
-    Write-Host "Creating Symlink: $($Symlink.Source) --> $($SymLinkPath) ..."
-    New-Item -ItemType SymbolicLink -Target $Symlink.Source -Path $SymLinkPath -Verbose  
+    Write-Host "Creating Symlink: $($SymLinkSource) --> $($SymLinkPath) ..."
+    New-Item -ItemType SymbolicLink -Target $SymLinkSource -Path $SymLinkPath -Verbose  
   }
 }  
 
