@@ -80,13 +80,22 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
       New-Item -ItemType SymbolicLink -Target $Symlink.Source -Path $SymLinkPath -Verbose
     }
   }
-}
-  
+}  
 
 # TODO Windows Terminal Settings Config
 
 # TODO Setup PS 5.1 shim profile
 
 # TODO oh-my-posh configuration
+
+# Load oh-my-posh
+Import-Module oh-my-posh -Force
+Set-PoshPrompt -Theme "half-life"
+# Load Terminal Icons
+Import-Module Terminal-Icons -Force
+# Perform basic PSReadline config
+Import-Module PSReadLine -Force
+Set-PSreadLineOption -PredictionViewStyle ListView -PredictionSource HistoryAndPlugin
+
 
 # TODO Setup WSL Instances

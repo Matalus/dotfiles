@@ -1,5 +1,15 @@
 # Installation (WIP)
 
+## Quick Installation
+
+1. Go the the parent directory where you want the repo to exist (ex. `c:\src`)
+2. Run the following command as **Administrator** in PowerShell
+
+```PowerShell
+# Clones Repo to directory and runs installer script
+git clone https://github.com/Matalus/windots.git terminal-profile; cd terminal-profile; .\install.ps1
+```
+
 ## prerequisites
 
 ### Install PowerShell 7
