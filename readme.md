@@ -3,7 +3,9 @@
 
 **Quick Install**
 
-[![Quick Install](https://img.youtube.com/vi/2xkyf9uLK5M/0.jpg)](https://youtube.com/watch?v=2xkyf9uLK5M "Quick Install")
+<a href="https://youtube.com/watch?v=2xkyf9uLK5M">
+  <img src="https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg" alt="Quick Install" width="600"/>
+</a>
 
 **Neovim Setup**
 
