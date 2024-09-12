@@ -26,10 +26,10 @@ if (!($PowerShellYaml)) {
 Write-Host -ForegroundColor White "Loading Profile Functions:" -NoNewline
 Try {
   Import-Module "$ProfileDir\profile_functions.psm1" -Force -ErrorAction SilentlyContinue
-  Write-Host -ForegroundColor Green " OK"
+  Write-Host -ForegroundColor Green " OK ✅"
 }
 Catch {
-  Write-Host -ForegroundColor Red " Fail"
+  Write-Host -ForegroundColor Red " Fail ❌"
 }
 
 # Get PowerShell Info from custom function
@@ -62,7 +62,7 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
     $SymLinkExists = Get-Item $SymLinkPath -ErrorAction SilentlyContinue | Where-Object { $_.Attributes -match "ReparsePoint" } 
   | Where-Object { $_.FullName -eq $SymLinkPath -and $_.Target -eq $SymLinkSource }
     if ($SymLinkExists) {
-      Write-Host -ForegroundColor Green " OK"
+      Write-Host -ForegroundColor Green " OK ✅"
     }
     else {
       Write-Host -ForegroundColor Yellow " missing"
@@ -72,16 +72,16 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
         $Leaf = Split-Path -Leaf $SymLinkPath
         $Parent = Split-Path -Parent $SymLinkPath
         $BackupPath = "$($Parent)\$($Leaf).$(get-date -Format "yyyyddMM-hhmm").BAK"
-        Write-Host -ForegroundColor Yellow "Backuping up current directory: $($SymLinkPath) to: $($BackupPath)"
+        Write-Host -ForegroundColor Yellow "🖫 Backuping up current directory: $($SymLinkPath) to: $($BackupPath)"
         # Throw error if data can't be moved to avoid
         Move-Item -Path $SymLinkPath -Destination $BackupPath -Verbose -ErrorAction Stop
       }
     }
   }
   else {
-    Write-Host -ForegroundColor Yellow " missing"
+    Write-Host -ForegroundColor Yellow " missing ⚠️"
     # Create Missing Symlinks
-    Write-Host "Creating Symlink: $($SymLinkSource) --> $($SymLinkPath) ..."
+    Write-Host "▶️ Creating Symlink: $($SymLinkSource) --> $($SymLinkPath) ..."
     New-Item -ItemType SymbolicLink -Target $SymLinkSource -Path $SymLinkPath -Verbose  
   }
 }  

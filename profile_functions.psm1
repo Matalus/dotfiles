@@ -50,7 +50,7 @@ function Get-ScoopPackages ($ScoopConfigPath,$PSInfo) {
     Write-Host -ForegroundColor Cyan "Attempting to Install Scoop..."
     Install-Scoop
   }else{
-    Write-Host -ForegroundColor Green " OK"
+    Write-Host -ForegroundColor Green " OK ✅"
   }
 
     # Load Scoop Config
@@ -70,15 +70,15 @@ function Get-ScoopPackages ($ScoopConfigPath,$PSInfo) {
   # Get Installed Scoop Buckets
   [array]$ScoopBuckets = Invoke-Expression "scoop bucket list" 6>$null
 
-
+    $padvalue = ($ScoopAppsRequired | ForEach-Object {$_.Length} | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum) + 3
     # check for installed buckets and add missing
     ForEach($Bucket in $ScoopBucketsRequired){
-      Write-Host -ForegroundColor White "-> $($Bucket):" -NoNewline
+      Write-Host -ForegroundColor White "-> $($Bucket):".PadRight(100).Substring(0,$padvalue) -NoNewline
       if($Bucket -notin $ScoopBuckets.Name){
-        Write-Host -ForegroundColor Yellow " missing"
+        Write-Host -ForegroundColor Yellow " missing ⚠️"
         Invoke-Expression "scoop bucket add $($Bucket)"
       }else{
-        Write-Host -ForegroundColor Green " OK"
+        Write-Host -ForegroundColor Green " OK ✅"
       }
     }
 
@@ -90,12 +90,12 @@ function Get-ScoopPackages ($ScoopConfigPath,$PSInfo) {
 
   # check for Installed apps and add missing
   ForEach($App in $ScoopAppsRequired){
-    Write-Host "-> $($App):" -NoNewLine
+    Write-Host "-> $($App):".PadRight(100).Substring(0,$padvalue) -NoNewLine
     if($App -notin $ScoopApps){
-      Write-Host -ForegroundColor Yellow "missing"
+      Write-Host -ForegroundColor Yellow "missing "
       Invoke-Expression "scoop install $($App)"
     }else{
-      Write-Host -ForegroundColor Green " OK"
+      Write-Host -ForegroundColor Green " OK ✅"
     }
   }
 }
