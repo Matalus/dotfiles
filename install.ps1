@@ -95,6 +95,8 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
 # Load oh-my-posh
 Import-Module oh-my-posh -Force
 Set-PoshPrompt -Theme "half-life"
+# Set preferred Nerd Font
+Set-ConsoleFont -Name 'FiraCode Nerd Font Mono' -Height 17
 # Load Terminal Icons
 Import-Module Terminal-Icons -Force
 # Perform basic PSReadline config
