@@ -1,5 +1,7 @@
 # Installation (WIP)
 
+[<img src="img/terminal.jpg" width="50%">](https://youtu.be/2xkyf9uLK5M "Quick Install")
+
 ## Quick Installation
 
 1. Go the the parent directory where you want the repo to exist (ex. `c:\src`)
