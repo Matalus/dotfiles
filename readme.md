@@ -1,20 +1,13 @@
 # Installation (WIP)
 
 
-**Quick Install**
+## Quick Installation
 
 <a href="https://youtube.com/watch?v=2xkyf9uLK5M">
   <img src="https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg" alt="Quick Install" width="800"/>
 </a>
 
-**Neovim Setup**
 
-<a href="https://youtube.com/watch?v=TC8Mc6Y5LTo">
-  <img src="https://img.youtube.com/vi/TC8Mc6Y5LTo/maxresdefault.jpg" alt="Neovim Setup" width="800"/>
-</a>
-
-
-## Quick Installation
 
 1. Go the the parent directory where you want the repo to exist (ex. `c:\src`)
 2. Run the following command as **Administrator** in PowerShell
@@ -24,11 +17,42 @@
 git clone https://github.com/Matalus/windots.git terminal-profile; cd terminal-profile; .\install.ps1
 ```
 
+## Neovim Setup (LazyVim)
+
+neovim configuration will be stored in `.\nvim-config` at the root of this repo.
+A Symbolic Link is created with a target of `$env:LOCALAPPDATA\nvim` (`c:\users\<profile>\appdata\local\nvim`)
+Neovim looks for it's configuration by default on windows in this directory.
+
+**Notable customizations**
+- **COC.nvim (Conqueror of Completion)** configured to support `PowerShell` autocompletion
+- **MarkdownLint** and **Markdown_Inline** configured in Mason to support live rendering in editor run `:RenderMarkdown`
+- **colorschemes.lua** additional colorschemes
+- **conform.nvim** setup for LSP and autoformatting `<leader>c+f`
+- **undotree**
+
+![neovim](https://www.vectorlogo.zone/logos/neovimio/neovimio-ar21.svg)
+
+<a href="https://youtube.com/watch?v=TC8Mc6Y5LTo">
+  <img src="https://img.youtube.com/vi/TC8Mc6Y5LTo/maxresdefault.jpg" alt="Neovim Setup" width="800"/>
+</a>
+
+
 ## prerequisites
+
+### Windows Terminal
+
+![Windows Terminal](https://learn.microsoft.com/windows/terminal/images/terminal.svg)
+
+> Installed via Scoop
+
+# TODO automate profile configuration
 
 ### Install PowerShell 7
 
+![powershell](https://raw.githubusercontent.com/PowerShell/PowerShell/master/assets/ps_black_128.svg?sanitize=true)
+
 > Check winget for latest version of PowerShell
+> NOTE: `install.ps1` will also attempt to automate this
 
 ```powershell
 $winget = winget search --Id Microsoft.PowerShell --exact;
@@ -43,24 +67,26 @@ $PSLatest = $winget | where-object {
 Get-Command pwsh -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
 ```
 
-### install scoop
+## Scoop package manager
+ ![scoop.sh](https://avatars.githubusercontent.com/u/16618068?s=30)
 
-2. Check for `scoop.cmd`
+> This Project relies on **Scoop** to manage and streamline software and package dependencies
 
-```PowerShell
-$scoop_installed = get-command scoop.cmd -ErrorAction SilentlyContinue
-```
-3. Install scoop if not scoop_installed
+The 1st time you run `.\install.ps1` the script will check if scoop is installed, and attempt to install if not present.
+
+if you'd like to install manually or browse for additional apps / packages visit [https://scoop.sh](https://scoop.sh/)
 
 ### scoop buckets 
 
-> required for some 3rd party pacakges
+> required for some 3rd party packages
 
 - extras
 - nerd-fonts
 - main
 
 ### scoop packages
+
+> Add additional packages to `scoop.yaml` to make them required
 
 - neovim
 - extras/windows-terminal
