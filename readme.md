@@ -1,7 +1,14 @@
 # Installation (WIP)
 
 
-[![Quick Install](https://img.youtube.com/vi/TC8Mc6Y5LTo/maxresdefault.jpg)](https://youtube.com/watch?v=TC8Mc6Y5LTo "Quick Install")
+**Quick Install**
+
+[![Quick Install](https://img.youtube.com/vi/2xkyf9uLK5M/0.jpg)](https://youtube.com/watch?v=2xkyf9uLK5M "Quick Install")
+
+**Neovim Setup**
+
+[![Neovim Install](https://img.youtube.com/vi/TC8Mc6Y5LTo/0.jpg)](https://youtube.com/watch?v=TC8Mc6Y5LTo "Neovim Install")
+
 
 ## Quick Installation
 
