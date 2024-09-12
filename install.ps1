@@ -75,10 +75,13 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
         # Throw error if data can't be moved to avoid
         Move-Item -Path $SymLinkPath -Destination $BackupPath -Verbose -ErrorAction Stop
       }
-      # Create Missing Symlinks
-      Write-Host "Creating Symlink: $($Symlink.Source) --> $($SymLinkPath) ..."
-      New-Item -ItemType SymbolicLink -Target $Symlink.Source -Path $SymLinkPath -Verbose
     }
+  }
+  else {
+    Write-Host -ForegroundColor Yellow " missing"
+    # Create Missing Symlinks
+    Write-Host "Creating Symlink: $($Symlink.Source) --> $($SymLinkPath) ..."
+    New-Item -ItemType SymbolicLink -Target $Symlink.Source -Path $SymLinkPath -Verbose  
   }
 }  
 
