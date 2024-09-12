@@ -1,7 +1,7 @@
 # Installation (WIP)
 
 
-[![Quick Install] (https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg)](https://youtu.be/2xkyf9uLK5M)
+[![Quick Install](https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg)](https://youtube.com/watch?v=2xkyf9uLK5M "Quick Install")
 
 ## Quick Installation
 
