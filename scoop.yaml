@@ -1,0 +1,33 @@
+apps:
+  - main/neovim
+  - main/oh-my-posh # Terminal Prompt Customization
+  - main/diffutils # Required for Neovim
+  - main/7zip # Required for Neovim
+  - main/lua # Required for Neovim
+  - main/curl # Network Tools
+  - main/nmap # Network Tools
+  - main/luarocks # Required for Neovim
+  - main/vim # Classic VIM
+  - main/nano # Nano Text Editor
+  - main/ast-grep # Required for Neovim
+  - main/cacert # Cert Tools
+  - main/fd # Required for Neovim
+  - main/fzf # Required for Neovim
+  - main/grep # Grep for windows
+  - main/gzip # Required for Neovim
+  - main/micro # Micro (fork of nano)
+  - main/mingw # Required for Neovim (compiler)
+  - main/ripgrep # Required for Neovim
+  - main/tree-sitter # Required for Neovim
+  - main/wget # Required for Neovim
+  - extras/vcredist2022 # Required for Neovim
+  - extras/windows-terminal # Terminal Customizaton
+  - extras/terminal-icons # Terminal Customizaton
+  - extras/posh-git # Terminal Customizaton
+  - extras/psreadline # Terminal Customizaton
+  - extras/lazygit # Required for Neovim
+  - nerd-fonts/FiraCode-NF # Nerd Fonts
+  - nerd-fonts/FiraCode-NF-Mono # Nerd Fonts
+  - nerd-fonts/CascadiaCode-NF # Nerd Fonts
+  - nerd-fonts/CascadiaMono-NF # Nerd Fonts
+  - nerd-fonts/JetBrainsMono-NF # Nerd Fonts

@@ -1,0 +1,8 @@
+symlinks:
+# Neovim
+- name: nvim-config
+  source: nvim-config
+  target: $env:LOCALAPPDATA\nvim
+- name: nvim-data
+  source: nvim-data
+  target: $env:LOCALAPPDATA\nvim-data
