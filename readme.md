@@ -1,9 +1,7 @@
 # Installation (WIP)
 
 
-[![Quick Install]          // Title
-(img/terminal.jpg)] // Thumbnail
-(https://youtu.be/2xkyf9uLK5M "Quick Install")    // Video Link
+[![Quick Install] (https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg)](https://youtu.be/2xkyf9uLK5M)
 
 ## Quick Installation
 
