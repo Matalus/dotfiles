@@ -4,12 +4,14 @@
 **Quick Install**
 
 <a href="https://youtube.com/watch?v=2xkyf9uLK5M">
-  <img src="https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg" alt="Quick Install" width="600"/>
+  <img src="https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg" alt="Quick Install" width="800"/>
 </a>
 
 **Neovim Setup**
 
-[![Neovim Install](https://img.youtube.com/vi/TC8Mc6Y5LTo/0.jpg)](https://youtube.com/watch?v=TC8Mc6Y5LTo "Neovim Install")
+<a href="https://youtube.com/watch?v=TC8Mc6Y5LTo">
+  <img src="https://img.youtube.com/vi/TC8Mc6Y5LTo/maxresdefault.jpg" alt="Neovim Setup" width="800"/>
+</a>
 
 
 ## Quick Installation
