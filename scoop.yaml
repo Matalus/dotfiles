@@ -20,6 +20,9 @@ apps:
   - main/ripgrep # Required for Neovim
   - main/tree-sitter # Required for Neovim
   - main/wget # Required for Neovim
+  - main/terraform # Hashicorp Terraform
+  - main/terragrunt # Terragrunt
+  - main/zoxide # Directory utility
   - extras/vcredist2022 # Required for Neovim
   - extras/windows-terminal # Terminal Customizaton
   - extras/terminal-icons # Terminal Customizaton

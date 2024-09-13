@@ -1,0 +1,5 @@
+nerd_font: FiraCode Nerd Font Mono # This will be the primary Nerd Font used
+fallback_font: CaskaydiaCove NF # This will be used as a fallback where applicable
+posh_prompt: half-life # Run Get-PoshThemes to see all possible themes
+default_terminal: pwsh # Name of default Windows Terminal Profile
+home_dir: c:\src

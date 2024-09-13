@@ -1,8 +1,12 @@
 symlinks:
 # Neovim
-- name: nvim-config
-  source: nvim-config
+- name: neovim config
+  source: .nvim
   target: $env:LOCALAPPDATA\nvim
-- name: nvim-data
-  source: nvim-data
-  target: $env:LOCALAPPDATA\nvim-data
+  # PowerShell profiles
+- name: Windows Powershell Shim Profile
+  source: .ps5shim
+  target: $PS5TempProfile
+- name: PowerShell 7 Profile
+  source: .psprofile
+  target: $PS7TempProfile

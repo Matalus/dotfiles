@@ -1,4 +1,4 @@
-# Colletion of profile functions
+# Collection of profile functions
 
 # Function to check is PowerShell is running as Admin
 function Get-PSInfo {
@@ -250,6 +250,14 @@ if (-not ("Windows.Native.Kernel32" -as [type]))
       }
     }
 "@
+}
+
+# Get PS Profile Paths
+function Get-PSProfile {
+  return [pscustomobject]@{
+    PS7Profile = & "pwsh.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { split-path -Parent $_ } ;
+    PS5Profile = & "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { split-path -Parent $_ } ;
+  }
 }
 function Set-ConsoleFont
 {

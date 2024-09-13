@@ -1,2 +1,3 @@
 nvim-config/lazy-lock.json
-
+.psprofile/Modules
+.psprofile/custom_modules/ps_functions.psm1

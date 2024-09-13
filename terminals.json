@@ -1,0 +1,48 @@
+[
+    {
+        "adjustIndistinguishableColors": "always",
+        "commandline": "\"C:\\Program Files\\PowerShell\\7\\pwsh.exe\"",
+        "elevate": true,
+        "font": {
+            "face": "FiraCode Nerd Font Mono"
+        },
+        "guid": "{186e360d-31ff-4114-a549-a51ab124b0ca}",
+        "hidden": false,
+        "icon": "ms-appx:///ProfileIcons/pwsh.png",
+        "name": "pwsh",
+        "opacity": 90,
+        "startingDirectory": "c:\\src",
+        "tabTitle": "pwsh"
+    },
+    {
+        "colorScheme": "Tango Dark",
+        "elevate": false,
+        "font": {
+            "face": "FiraCode Nerd Font Mono"
+        },
+        "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+        "hidden": false,
+        "name": "PowerShell 5.1",
+        "opacity": 90,
+        "tabTitle": "PowerShell 5.1"
+    },
+    {
+        "adjustIndistinguishableColors": "always",
+        "backgroundImage": "C:\\src\\terminal-profile\\img\\terraform.png",
+        "backgroundImageOpacity": 0.16,
+        "backgroundImageStretchMode": "uniformToFill",
+        "commandline": "\"C:\\Program Files\\PowerShell\\7\\pwsh.exe\"",
+        "elevate": false,
+        "font": 
+        {
+            "face": "FiraCode Nerd Font Mono,CaskaydiaCove NF"
+        },
+        "guid": "{3db8d9f8-ad76-4d91-baee-abb2992c7c41}",
+        "hidden": false,
+        "icon": "C:\\src\\terminal-profile\\img\\tf_icon.png",
+        "name": "Terraform",
+        "opacity": 90,
+        "startingDirectory": "C:\\src\\azure-terraform",
+        "tabTitle": "Terraform"
+    }
+]
