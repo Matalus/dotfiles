@@ -72,26 +72,27 @@ return {
   { import = "lazyvim.plugins.extras.lang.typescript" },
 
   -- add more treesitter parsers
-  --  0v opts = {
-  --     ensure_installed = {
-  --       "bash",
-  --       "html",
-  --       "javascript",
-  --       "json",
-  --       "lua",
-  --       "markdown",
-  --       "markdown_inline",
-  --       "python",
-  --       "query",
-  --       "regex",
-  --       "tsx",
-  --       "typescript",
-  --       "vim",
-  --       "yaml",
-  --       "powershell",
-  --     },
-  --   },
-  -- },
+  {
+    opts = {
+      ensure_installed = {
+        "bash",
+        "html",
+        "javascript",
+        "json",
+        "lua",
+        "markdown",
+        "markdown_inline",
+        "python",
+        "query",
+        "regex",
+        "tsx",
+        "typescript",
+        "vim",
+        "yaml",
+        "powershell",
+      },
+    },
+  },
 
   -- since `vim.tbl_deep_extend`, can only merge tables and not lists, the code above
   -- would overwrite `ensure_installed` with the new value.
@@ -169,6 +170,10 @@ return {
         "shfmt",
         "flake8",
         "powershell",
+        "json",
+        "yaml",
+        "markdown",
+        "markdown_inline",
       },
     },
   },

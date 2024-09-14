@@ -20,6 +20,8 @@ neovim configuration will be stored in `.\nvim-config` at the root of this repo.
 A Symbolic Link is created with a target of `$env:LOCALAPPDATA\nvim` (`c:\users\<profile>\appdata\local\nvim`)
 Neovim looks for it's configuration by default on windows in this directory.
 
+![neovim](img/nvim.jpg)
+
 ### **Notable customizations**
 
 - **COC.nvim (Conqueror of Completion)** configured to support `PowerShell` autocompletion
@@ -27,6 +29,7 @@ Neovim looks for it's configuration by default on windows in this directory.
 - **colorschemes.lua** additional colorschemes
 - **conform.nvim** setup for LSP and autoformatting `<leader>cf`
 - **gitsigns.nvim** show inline diff `<leader>gp`
+- **vim-fugitive**
 - **undotree**
 
 ![neovim](https://www.vectorlogo.zone/logos/neovimio/neovimio-ar21.svg)
@@ -68,6 +71,7 @@ Get-Command pwsh -ErrorAction SilentlyContinue | Select-Object -ExpandProperty V
 ```
 
 ## Scoop package manager
+
  ![scoop.sh](https://avatars.githubusercontent.com/u/16618068?s=30)
 
 > This Project relies on **Scoop** to manage and streamline software and package dependencies
@@ -119,4 +123,3 @@ if you'd like to install manually or browse for additional apps / packages visit
 - main/ripgrep
 - main/tree-sitter
 - main/wget
- 
