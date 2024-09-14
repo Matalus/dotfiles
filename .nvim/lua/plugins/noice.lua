@@ -12,6 +12,9 @@ return {
       notify = {
         timeout = 10000, -- Set the timeout to 5000 milliseconds (5 seconds)
       },
+      messages = {
+        timeout = 20000,
+      }
     },
   },
 }
