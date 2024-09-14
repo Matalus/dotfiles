@@ -1,13 +1,11 @@
-# Installation (WIP)
-
+# Windots
 
 ## Quick Installation
 
-<a href="https://youtube.com/watch?v=2xkyf9uLK5M">
+  <a href="https://youtube.com/watch?v=2xkyf9uLK5M">
+
   <img src="https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg" alt="Quick Install" width="800"/>
 </a>
-
-
 
 1. Go the the parent directory where you want the repo to exist (ex. `c:\src`)
 2. Run the following command as **Administrator** in PowerShell
@@ -16,18 +14,19 @@
 # Clones Repo to directory and runs installer script
 git clone https://github.com/Matalus/windots.git terminal-profile; cd terminal-profile; .\install.ps1
 ```
-
 ## Neovim Setup (LazyVim)
 
 neovim configuration will be stored in `.\nvim-config` at the root of this repo.
 A Symbolic Link is created with a target of `$env:LOCALAPPDATA\nvim` (`c:\users\<profile>\appdata\local\nvim`)
 Neovim looks for it's configuration by default on windows in this directory.
 
-**Notable customizations**
+### **Notable customizations**
+
 - **COC.nvim (Conqueror of Completion)** configured to support `PowerShell` autocompletion
 - **MarkdownLint** and **Markdown_Inline** configured in Mason to support live rendering in editor run `:RenderMarkdown`
 - **colorschemes.lua** additional colorschemes
-- **conform.nvim** setup for LSP and autoformatting `<leader>c+f`
+- **conform.nvim** setup for LSP and autoformatting `<leader>cf`
+- **gitsigns.nvim** show inline diff `<leader>gp`
 - **undotree**
 
 ![neovim](https://www.vectorlogo.zone/logos/neovimio/neovimio-ar21.svg)
@@ -35,7 +34,6 @@ Neovim looks for it's configuration by default on windows in this directory.
 <a href="https://youtube.com/watch?v=TC8Mc6Y5LTo">
   <img src="https://img.youtube.com/vi/TC8Mc6Y5LTo/maxresdefault.jpg" alt="Neovim Setup" width="800"/>
 </a>
-
 
 ## prerequisites
 
