@@ -66,15 +66,20 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
   $SymLinkSource = "$ProfileDir\$($Symlink.source)"
   Write-Host "Checking Symlink: $($SymLinkPath):" -ForegroundColor White -NoNewline
   $TestTarget = Test-Path $SymLinkPath
+
+  $create_symlink = $true # default state
   
   if ($TestTarget) {
     # check if symlink already exists
+    $create_symlink = $false # assume it could exist, verify in next step
     $SymLinkExists = Get-Item $SymLinkPath -ErrorAction SilentlyContinue | Where-Object { $_.Attributes -match "ReparsePoint" } 
-  | Where-Object { $_.FullName -eq $SymLinkPath -and $_.Target -eq $SymLinkSource }
+    | Where-Object { $_.FullName -eq $SymLinkPath -and $_.Target -eq $SymLinkSource }
     if ($SymLinkExists) {
       Write-Host -ForegroundColor Green " OK ✅"
+      $create_symlink = $false
     }
     else {
+      $create_symlink = $true # plan to create symlink 
       Write-Host -ForegroundColor Yellow " missing ❌"
       $Contents = Get-ChildItem $SymLinkPath -Recurse -Force -ErrorAction SilentlyContinue
       if ($Contents) {
@@ -86,13 +91,14 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
         # Throw error if data can't be moved to avoid
         Move-Item -Path $SymLinkPath -Destination $BackupPath -Verbose -ErrorAction Stop
       }
-      Write-Host -ForegroundColor Yellow " missing ⚠️"
-      # Create Missing Symlinks
-      Write-Host " ▶️  Creating Symlink: $($SymLinkSource) --> $($SymLinkPath) ..."
-      New-Item -ItemType SymbolicLink -Target $SymLinkSource -Path $SymLinkPath -Verbose  
-  
     }
-  }  
+  } 
+  if ($create_symlink) {
+    Write-Host -ForegroundColor Yellow " missing ⚠️"
+    # Create Missing Symlinks
+    Write-Host " ▶️  Creating Symlink: $($SymLinkSource) --> $($SymLinkPath) ..."
+    New-Item -ItemType SymbolicLink -Target $SymLinkSource -Path $SymLinkPath -D -Verbose  
+  }
 }
 
 # Get WindowsTerminal LocalState paths
