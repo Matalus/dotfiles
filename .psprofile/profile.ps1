@@ -1,5 +1,9 @@
 #TODO fix profile patching
 
+if($Host.Name -match "vim"){
+   Exit
+}
+
 #Define RunDir
 $RunDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
