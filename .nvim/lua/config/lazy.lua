@@ -40,7 +40,7 @@ require("lazy").setup({
       "habamax",
       "nordic",
       "onedark",
-      "catpuccin",
+      "catppuccin",
     }
   },
   checker = {

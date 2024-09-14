@@ -31,6 +31,8 @@ Neovim looks for it's configuration by default on windows in this directory.
 
 ![neovim](https://www.vectorlogo.zone/logos/neovimio/neovimio-ar21.svg)
 
+💤 LazyVim
+
 <a href="https://youtube.com/watch?v=TC8Mc6Y5LTo">
   <img src="https://img.youtube.com/vi/TC8Mc6Y5LTo/maxresdefault.jpg" alt="Neovim Setup" width="800"/>
 </a>
