@@ -56,7 +56,6 @@ $PS5TempProfile = $TempProfile.PS5Profile
 $PS7TempProfile = $TempProfile.PS7Profile
 
 # Setup Symlinks
-# TODO setup symlink handings and move into function
 $SymLinkConfigPath = "$ProfileDir\symlinks.yaml"
 $SymLinks = Get-Content $SymLinkConfigPath | ConvertFrom-Yaml
 

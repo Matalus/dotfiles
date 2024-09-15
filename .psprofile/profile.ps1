@@ -1,8 +1,15 @@
 #TODO fix profile patching
-
-if($Host.Name -match "vim"){
+$env:POWERSHELL_UPDATECHECK = "Off"
+# safety catch so neovim doesn't choke
+if ($Host.Name -match "vim") {
    Exit
 }
+
+$NoUpdate = if (
+   $UpdateCheck.Current.Major -eq $UpdateCheck.Latest.Major -and
+   $UpdateCheck.Current.Minor -eq $UpdateCheck.Latest.Minor -and
+   $UpdateCheck.Current.Build -eq $UpdateCheck.Latest.Build
+) { $true }else { $false }
 
 #Define RunDir
 $RunDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -91,11 +98,11 @@ if (Test-Path $ModuleConfigPath) {
       }
    }
    
-   $module_len = ($Modules | ForEach-Object {$_.Name.Length} | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum) + 20
+   $module_len = ($Modules | ForEach-Object { $_.Name.Length } | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum) + 20
    
    ForEach ($module in $modules) {
-      Write-Host "Loading Module: $($module.Name)".PadRight(100).Substring(0,$module_len) -NoNewline
-      Write-Host "| $($module.MinVer) ".PadRight(100).Substring(0,20) -NoNewline
+      Write-Host "Loading Module: $($module.Name)".PadRight(100).Substring(0, $module_len) -NoNewline
+      Write-Host "| $($module.MinVer) ".PadRight(100).Substring(0, 20) -NoNewline
       $getModuleSplat = @{
          ListAvailable      = $true
          FullyQualifiedName = @{ModuleName = "$($module.Name)"; ModuleVersion = "$($module.MinVer)" }
@@ -103,8 +110,8 @@ if (Test-Path $ModuleConfigPath) {
       }
 
       if (!(Get-Module @getModuleSplat)) {
-         Write-Host "`nInstalling Module: $($module.Name)".PadRight(100).Substring(0,$module_len) -NoNewline
-         Write-Host " | $($module.MinVer) ".PadRight(100).Substring(0,21) -NoNewline
+         Write-Host "`nInstalling Module: $($module.Name)".PadRight(100).Substring(0, $module_len) -NoNewline
+         Write-Host " | $($module.MinVer) ".PadRight(100).Substring(0, 21) -NoNewline
          $installModuleSplat = @{
             Name           = $module.Name
             MinimumVersion = $module.MinVer
@@ -219,5 +226,3 @@ if ($PSCore) {
 
 # Set Dir
 Set-Location $HomeDir
-
-

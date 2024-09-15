@@ -2,7 +2,6 @@
 $setAzConfigSplat = @{
     EnableLoginByWam             = $false
     LoginExperienceV2            = 'Off'
-    DefaultSubscriptionForLogin  = '29696a17-158a-43bb-8edf-9e9e0fb2976a'
     DisplayBreakingChangeWarning = $false
     DisplaySurveyMessage         = $false
     EnableDataCollection         = $false
