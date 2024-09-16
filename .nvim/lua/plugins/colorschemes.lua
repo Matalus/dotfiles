@@ -22,6 +22,13 @@ return {
   {
     "rebelot/kanagawa.nvim",
     name = "kanagawa",
+    opts = {
+      transparent = true,
+      styles = {
+        sidebars = "transparent",
+        floats = "transparent",
+      }
+    }
   },
   {
     "rose-pine/neovim",
