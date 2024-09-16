@@ -16,7 +16,7 @@
     },
     {
         "Name": "PSReadLine",
-        "MinVer": "2.4.0",
+        "MinVer": "2.4.0-beta0",
         "PSCore": true
     },
     {
