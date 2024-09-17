@@ -1,6 +1,22 @@
 -- bootstrap lazy.nvim, LazyVim and your plugins
 require("config.lazy")
 
+require("powershell").setup({
+  bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
+  settings = {
+    codeFormatting = {
+      openBraceOnSameLine = true,
+    },
+    powershell = {
+      scriptAnalysis = {
+        enable = true,
+        settingsPath =
+        "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PSScriptAnalyzer/1.22.0/PSScriptAnalyzer.psd1",
+      },
+    },
+  },
+})
+
 local servers = { "html", "cssls", "powershell_es", "lua_ls" }
 
 -- require("powershell").setup {
@@ -14,7 +30,6 @@ local servers = { "html", "cssls", "powershell_es", "lua_ls" }
 --   vim.g.undoTree_DiffCommand = "diff"
 --   require "options"
 --   require "nvchad.autocmds"
-  
 --   vim.schedule(function()
 --     require "mappings"
 --   end)
