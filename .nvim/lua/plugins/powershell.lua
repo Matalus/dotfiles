@@ -7,6 +7,21 @@ return {
     },
     lazy = false,
     branch = "main",
+    settings = {
+      codeFormatting = {
+        openBraceOnSameLine = true,
+      },
+      powershell = {
+        scriptAnalysis = {
+          enable = true,
+          settingsPath =
+          "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PSScriptAnalyzer/1.22.0/PSScriptAnalyzer.psd1",
+        },
+      },
+    },
+  },
+  {
+    "JayDoubleu/vim-pwsh-formatter",
   },
   {
     "Willem-J-an/nvim-dap-powershell",

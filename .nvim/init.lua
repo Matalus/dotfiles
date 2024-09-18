@@ -1,23 +1,37 @@
 -- bootstrap lazy.nvim, LazyVim and your plugins
 require("config.lazy")
-
-require("powershell").setup({
-  bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
-  settings = {
-    codeFormatting = {
-      openBraceOnSameLine = true,
-    },
-    powershell = {
-      scriptAnalysis = {
-        enable = true,
-        settingsPath =
-        "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PSScriptAnalyzer/1.22.0/PSScriptAnalyzer.psd1",
-      },
-    },
-  },
+require("conform").setup({
+  formatters_by_ft = {
+    ps1 = { "prettier" },
+    psm1 = { "powershell_es" },
+    psd1 = { "powershell_es" },
+  }
 })
+-- require("powershell").setup({ bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
+--   settings = {
+--     codeFormatting = {
+--       openBraceOnSameLine = true,
+--     },
+--     powershell = {
+--       scriptAnalysis = {
+--         enable = true,
+--         settingsPath =
+--         "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PSScriptAnalyzer/1.22.0/PSScriptAnalyzer.psd1",
+--       },
+--     },
+--   },
+-- })
+--
+-- local servers = { "html", "cssls", "powershell_es", "lua_ls" }
 
-local servers = { "html", "cssls", "powershell_es", "lua_ls" }
+-- PowerShell as default terminal
+vim.o.shell = "powershell"
+vim.o.shellcmdflag =
+" -NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+vim.o.shellredir = "2>&1 | Out-File -Encoding UTF8 %s: exit $LastExitCode"
+vim.o.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s: exit $LastExitCode"
+vim.o.shellquote = ""
+vim.o.shellxquote = ""
 
 -- require("powershell").setup {
 --     bundle_path = vim.fn.stdpath "data" .. "/mason/packages/powershell-editor-services",

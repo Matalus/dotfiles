@@ -25,7 +25,7 @@ return {
         lua = { "stylua" },
         python = { "isort", "black" },
         javascript = { "prettierd", "prettier", stop_after_first = true },
-        ps1 = { "powershell_es" },
+        ps1 = { "powershell_es", "prettier" },
       },
       -- Set default options
       default_format_opts = {
