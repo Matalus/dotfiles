@@ -1,3 +1,5 @@
+Write-Host -ForegroundColor Cyan "Setting: AzCLI Options: " -NoNewline
+
 # Set-AzConfig preferences
 $setAzConfigSplat = @{
     EnableLoginByWam             = $false
@@ -31,3 +33,4 @@ Register-ArgumentCompleter -Native -CommandName az -ScriptBlock {
     Env:\COMP_LINE, Env:\COMP_POINT, Env:\_ARGCOMPLETE, Env:\_ARGCOMPLETE_SUPPRESS_SPACE, Env:\_ARGCOMPLETE_IFS, 
     Env:\_ARGCOMPLETE_SHELL
 }
+Write-Host -ForegroundColor Green "done"

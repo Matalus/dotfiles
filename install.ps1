@@ -71,8 +71,10 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
   if ($TestTarget) {
     # check if symlink already exists
     $create_symlink = $false # assume it could exist, verify in next step
-    $SymLinkExists = Get-Item $SymLinkPath -ErrorAction SilentlyContinue | Where-Object { $_.Attributes -match "ReparsePoint" } 
-    | Where-Object { $_.FullName -eq $SymLinkPath -and $_.Target -eq $SymLinkSource }
+    $SymLinkExists = Get-Item $SymLinkPath -ErrorAction SilentlyContinue | Where-Object { 
+      $_.Attributes -match "ReparsePoint" } | Where-Object { 
+        $_.FullName -eq $SymLinkPath -and $_.Target -eq $SymLinkSource 
+      }
     if ($SymLinkExists) {
       Write-Host -ForegroundColor Green " OK ✅"
       $create_symlink = $false
@@ -126,43 +128,65 @@ if ($TermPaths) {
         Write-Host "Checking Profile: $($TermProfile.Name) : $($TermProfile.guid):" -NoNewline
 
         # check font
-        $NFString = "$($Defaults.nerd_font),$($Defaults.fallback_font)"
+        $NFString = if ($TermPath.FullName -match "Preview") { 
+          "$($Defaults.nerd_font),$($Defaults.fallback_font)"
+        }
+        else {
+          $Defaults.nerd_font
+        }
         if ($TermProfile.face -and $TermProfile.face.font -ne $NFString) {
           $TermProfile.face.font = $NFString
         }
         # check if profile exists in settings.json
-        if ($TermProfile.guid -notin $CurrentSettings.profiles.guid) {
+        if ($TermProfile.guid -notin $CurrentSettings.profiles.list.guid) {
           Write-Host -ForegroundColor Yellow " Patching ⚠️"
-          $CurrentSettings.profiles += $TermProfile
+          $CurrentSettings.profiles.list += $TermProfile
           $ChangeCount++
         }
         else {
           Write-Host -ForegroundColor Green " OK ✅"
         }
-        if ($ChangeCount -ge 1) {
-          # Backup old settings
-          $BackupSettingsPath = $TermPath.FullName -replace "settings.json", "settings.bak.json"
-          "Backing up: $($TermPath.FullName) --> settings.bak.json 💾"
-          Move-Item -Path $TermPath.FullName -Destination $BackupSettingsPath -Verbose
+      }
+      if ($ChangeCount -ge 1) {
+        # Backup old settings
+        $BackupSettingsPath = $TermPath.FullName -replace "settings.json", "settings.bak.json"
+        "Backing up: $($TermPath.FullName) --> settings.bak.json 💾"
+        Move-Item -Path $TermPath.FullName -Destination $BackupSettingsPath -Verbose -Force
 
-          # Export Updated Settings file
-          $CurrentSettings | ConvertTo-Json -Depth 10 | Set-Content $TermPath.FullName -Verbose
-        }
+        # Export Updated Settings file
+        $CurrentSettings | ConvertTo-Json -Depth 10 | Set-Content $TermPath.FullName -Verbose
       }
     }
-    Catch {}
+    Catch {
+    }
   }
 }
 
 # Load oh-my-posh
 Import-Module oh-my-posh -Force
-Try { Set-PoshPrompt -Theme $Defaults.posh_prompt }Catch {}
+Try {
+  Set-PoshPrompt -Theme $Defaults.posh_prompt 
+}
+Catch {
+}
 # Set preferred Nerd Font
-Try { Set-ConsoleFont -Name $Defaults.nerd_font -Height 17 }Catch {}
+Try {
+  Set-ConsoleFont -Name $Defaults.nerd_font -Height 17 
+}
+Catch {
+}
 # Load Terminal Icons
-Try { Import-Module Terminal-Icons -Force }Catch {}
+Try {
+  Import-Module Terminal-Icons -Force 
+}
+Catch {
+}
 # Perform basic PSReadline config
-Try { Import-Module PSReadLine -Force }Catch {}
+Try {
+  Import-Module PSReadLine -Force 
+}
+Catch {
+}
 Set-PSreadLineOption -PredictionViewStyle ListView -PredictionSource HistoryAndPlugin
 
 # TODO Setup WSL Instances

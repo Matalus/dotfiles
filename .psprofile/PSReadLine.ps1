@@ -95,31 +95,31 @@ Set-PSReadLineKeyHandler -Key Ctrl+V `
     }
 }
 
-# Sometimes you want to get a property of invoke a member on what you've entered so far
-# but you need parens to do that.  This binding will help by putting parens around the current selection,
-# or if nothing is selected, the whole line.
-Set-PSReadLineKeyHandler -Key 'Alt+(' `
-    -BriefDescription ParenthesizeSelection `
-    -LongDescription "Put parenthesis around the selection or entire line and move the cursor to after the closing parenthesis" `
-    -ScriptBlock {
-    param($key, $arg)
+# # Sometimes you want to get a property of invoke a member on what you've entered so far
+# # but you need parens to do that.  This binding will help by putting parens around the current selection,
+# # or if nothing is selected, the whole line.
+# Set-PSReadLineKeyHandler -Key 'Alt+(' `
+#     -BriefDescription ParenthesizeSelection `
+#     -LongDescription "Put parenthesis around the selection or entire line and move the cursor to after the closing parenthesis" `
+#     -ScriptBlock {
+#     param($key, $arg)
 
-    $selectionStart = $null
-    $selectionLength = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetSelectionState([ref]$selectionStart, [ref]$selectionLength)
+#     $selectionStart = $null
+#     $selectionLength = $null
+#     [Microsoft.PowerShell.PSConsoleReadLine]::GetSelectionState([ref]$selectionStart, [ref]$selectionLength)
 
-    $line = $null
-    $cursor = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
-    if ($selectionStart -ne -1) {
-        [Microsoft.PowerShell.PSConsoleReadLine]::Replace($selectionStart, $selectionLength, '(' + $line.SubString($selectionStart, $selectionLength) + ')')
-        [Microsoft.PowerShell.PSConsoleReadLine]::SetCursorPosition($selectionStart + $selectionLength + 2)
-    }
-    else {
-        [Microsoft.PowerShell.PSConsoleReadLine]::Replace(0, $line.Length, '(' + $line + ')')
-        [Microsoft.PowerShell.PSConsoleReadLine]::EndOfLine()
-    }
-}
+#     $line = $null
+#     $cursor = $null
+#     [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+#     if ($selectionStart -ne -1) {
+#         [Microsoft.PowerShell.PSConsoleReadLine]::Replace($selectionStart, $selectionLength, '(' + $line.SubString($selectionStart, $selectionLength) + ')')
+#         [Microsoft.PowerShell.PSConsoleReadLine]::SetCursorPosition($selectionStart + $selectionLength + 2)
+#     }
+#     else {
+#         [Microsoft.PowerShell.PSConsoleReadLine]::Replace(0, $line.Length, '(' + $line + ')')
+#         [Microsoft.PowerShell.PSConsoleReadLine]::EndOfLine()
+#     }
+# }
 
 # Each time you press Alt+', this key handler will change the token
 # under or before the cursor.  It will cycle through single quotes, double quotes, or
@@ -249,67 +249,67 @@ Set-PSReadLineKeyHandler -Key F1 `
 }
 
 
-#
-# Ctrl+Shift+j then type a key to mark the current directory.
-# Ctrj+j then the same key will change back to that directory without
-# needing to type cd and won't change the command line.
+# #
+# # Ctrl+Shift+j then type a key to mark the current directory.
+# # Ctrj+j then the same key will change back to that directory without
+# # needing to type cd and won't change the command line.
 
-#
-$global:PSReadLineMarks = @{}
+# #
+# $global:PSReadLineMarks = @{}
 
-Set-PSReadLineKeyHandler -Key Ctrl+J `
-    -BriefDescription MarkDirectory `
-    -LongDescription "Mark the current directory" `
-    -ScriptBlock {
-    param($key, $arg)
+# Set-PSReadLineKeyHandler -Key Ctrl+J `
+#     -BriefDescription MarkDirectory `
+#     -LongDescription "Mark the current directory" `
+#     -ScriptBlock {
+#     param($key, $arg)
 
-    $key = [Console]::ReadKey($true)
-    $global:PSReadLineMarks[$key.KeyChar] = $pwd
-}
+#     $key = [Console]::ReadKey($true)
+#     $global:PSReadLineMarks[$key.KeyChar] = $pwd
+# }
 
-Set-PSReadLineKeyHandler -Key Ctrl+j `
-    -BriefDescription JumpDirectory `
-    -LongDescription "Goto the marked directory" `
-    -ScriptBlock {
-    param($key, $arg)
+# Set-PSReadLineKeyHandler -Key Ctrl+j `
+#     -BriefDescription JumpDirectory `
+#     -LongDescription "Goto the marked directory" `
+#     -ScriptBlock {
+#     param($key, $arg)
 
-    $key = [Console]::ReadKey()
-    $dir = $global:PSReadLineMarks[$key.KeyChar]
-    if ($dir) {
-        Set-Location $dir
-        [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
-    }
-}
+#     $key = [Console]::ReadKey()
+#     $dir = $global:PSReadLineMarks[$key.KeyChar]
+#     if ($dir) {
+#         Set-Location $dir
+#         [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+#     }
+# }
 
-Set-PSReadLineKeyHandler -Key Alt+j `
-    -BriefDescription ShowDirectoryMarks `
-    -LongDescription "Show the currently marked directories" `
-    -ScriptBlock {
-    param($key, $arg)
+# Set-PSReadLineKeyHandler -Key Alt+j `
+#     -BriefDescription ShowDirectoryMarks `
+#     -LongDescription "Show the currently marked directories" `
+#     -ScriptBlock {
+#     param($key, $arg)
 
-    $global:PSReadLineMarks.GetEnumerator() | ForEach-Object {
-        [PSCustomObject]@{Key = $_.Key; Dir = $_.Value } } |
-    Format-Table -AutoSize | Out-Host
+#     $global:PSReadLineMarks.GetEnumerator() | ForEach-Object {
+#         [PSCustomObject]@{Key = $_.Key; Dir = $_.Value } } |
+#     Format-Table -AutoSize | Out-Host
 
-    [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
-}
+#     [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+# }
 
-# Auto correct 'git cmt' to 'git commit'
-Set-PSReadLineOption -CommandValidationHandler {
-    param([CommandAst]$CommandAst)
+# # Auto correct 'git cmt' to 'git commit'
+# Set-PSReadLineOption -CommandValidationHandler {
+#     param([CommandAst]$CommandAst)
 
-    switch ($CommandAst.GetCommandName()) {
-        'git' {
-            $gitCmd = $CommandAst.CommandElements[1].Extent
-            switch ($gitCmd.Text) {
-                'cmt' {
-                    [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
-                        $gitCmd.StartOffset, $gitCmd.EndOffset - $gitCmd.StartOffset, 'commit')
-                }
-            }
-        }
-    }
-}
+#     switch ($CommandAst.GetCommandName()) {
+#         'git' {
+#             $gitCmd = $CommandAst.CommandElements[1].Extent
+#             switch ($gitCmd.Text) {
+#                 'cmt' {
+#                     [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
+#                         $gitCmd.StartOffset, $gitCmd.EndOffset - $gitCmd.StartOffset, 'commit')
+#                 }
+#             }
+#         }
+#     }
+# }
 
 # `ForwardChar` accepts the entire suggestion text when the cursor is at the end of the line.
 # This custom binding makes `RightArrow` behave similarly - accepting the next word instead of the entire suggestion text.
@@ -387,38 +387,40 @@ Set-PSReadLineKeyHandler -Key Alt+a `
     [Microsoft.PowerShell.PSConsoleReadLine]::SelectForwardChar($null, ($nextAst.Extent.EndOffset - $nextAst.Extent.StartOffset) - $endOffsetAdjustment)
 }
 
-# Allow you to type a Unicode code point, then pressing `Alt+x` to transform it into a Unicode char.
-Set-PSReadLineKeyHandler -Chord 'Alt+x' `
-    -BriefDescription ToUnicodeChar `
-    -LongDescription "Transform Unicode code point into a UTF-16 encoded string" `
-    -ScriptBlock {
-    $buffer = $null
-    $cursor = 0
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref] $buffer, [ref] $cursor)
-    if ($cursor -lt 4) {
-        return
-    }
+# # Allow you to type a Unicode code point, then pressing `Alt+x` to transform it into a Unicode char.
+# Set-PSReadLineKeyHandler -Chord 'Alt+x' `
+#     -BriefDescription ToUnicodeChar `
+#     -LongDescription "Transform Unicode code point into a UTF-16 encoded string" `
+#     -ScriptBlock {
+#     $buffer = $null
+#     $cursor = 0
+#     [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref] $buffer, [ref] $cursor)
+#     if ($cursor -lt 4) {
+#         return
+#     }
 
-    $number = 0
-    $isNumber = [int]::TryParse(
-        $buffer.Substring($cursor - 4, 4),
-        [System.Globalization.NumberStyles]::AllowHexSpecifier,
-        $null,
-        [ref] $number)
+#     $number = 0
+#     $isNumber = [int]::TryParse(
+#         $buffer.Substring($cursor - 4, 4),
+#         [System.Globalization.NumberStyles]::AllowHexSpecifier,
+#         $null,
+#         [ref] $number)
 
-    if (-not $isNumber) {
-        return
-    }
+#     if (-not $isNumber) {
+#         return
+#     }
 
-    try {
-        $unicode = [char]::ConvertFromUtf32($number)
-    }
-    catch {
-        return
-    }
+#     try {
+#         $unicode = [char]::ConvertFromUtf32($number)
+#     }
+#     catch {
+#         return
+#     }
 
-    [Microsoft.PowerShell.PSConsoleReadLine]::Delete($cursor - 4, 4)
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert($unicode)
-}
+#     [Microsoft.PowerShell.PSConsoleReadLine]::Delete($cursor - 4, 4)
+#     [Microsoft.PowerShell.PSConsoleReadLine]::Insert($unicode)
+# }
+
+Set-PSReadLineOption -PromptText '> '
 
 Write-Host -ForegroundColor Green "done"
