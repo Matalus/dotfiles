@@ -14,11 +14,15 @@
 # Clones Repo to directory and runs installer script
 git clone https://github.com/Matalus/windots.git terminal-profile; cd terminal-profile; .\install.ps1
 ```
+ 
 ## Install Script
+>
 > Script is idempotent, just run again to check for scoop updates etc (future update maybe incorporated into profile)
 
 ### Features
+
 - config defaults `defaults.yaml`
+
 ```yaml
 nerd_font: FiraCode Nerd Font Mono # This will be the primary Nerd Font used
 fallback_font: CaskaydiaCove NF # This will be used as a fallback where applicable
@@ -26,7 +30,9 @@ posh_prompt: half-life # Run Get-PoshThemes to see all possible themes
 default_terminal: pwsh # Name of default Windows Terminal Profile
 home_dir: c:\src
 ```
+
 - Symbolic links to keep all config in repo root (created by `install.ps1`)
+
 ```yaml
 symlinks:
 # Neovim
@@ -41,6 +47,7 @@ symlinks:
   source: .psprofile
   target: $PS7TempProfile
   ```
+
 - Shim Profile for Windows Powershell (5.1)
 rather than maintaining 2 separate profiles, a shim profile will run when you launch **Windows Powershell** that will automatically run your **pwsh** (7.x) profile `.ps5shim/profile.ps1`.  Some features won't run for 5.1 based on the variable `$PSCore` that checks the version
 
@@ -57,6 +64,7 @@ Set-Location $(split-path -parent $PSCoreProfile)
 # Revert to former working directory after unified profile script runs
 Set-Location $DirContext
 ```
+
 - Windows Terminal Profile Patching
 Will attempt to locate and patch the Windows Terminal `settings.json` to include preferred default terminal profiles as well as making sure they all have the same **Nerd Font** configured.
 
@@ -67,7 +75,6 @@ Will attempt to locate and patch the Windows Terminal `settings.json` to include
 
 **profile.ps1**
 ![profile](img/profile.jpg)
-
 
 ## Neovim Setup (LazyVim)
 
@@ -111,6 +118,7 @@ Neovim looks for it's configuration by default on windows in this directory.
 > NOTE: `install.ps1` will also attempt to automate this, might replace the default builtin function
 
 Method for getting latest version of powershell from winget
+
 ```powershell
 $winget = winget search --Id Microsoft.PowerShell --exact;
 $PSLatest = $winget | where-object {
@@ -125,6 +133,7 @@ Get-Command pwsh -ErrorAction SilentlyContinue | Select-Object -ExpandProperty V
 ```
 
 This method might work better
+
 ```PowerShell
 $UpdateCheck = [pscustomobject]@{
   Current=[version]($PSVersionTable.PSVersion | Select-Object Major,Minor,@{N="Build";E={$_.Patch}});
@@ -135,6 +144,39 @@ $NoUpdate = if (
    $UpdateCheck.Current.Minor -eq $UpdateCheck.Latest.Minor -and
    $UpdateCheck.Current.Build -eq $UpdateCheck.Latest.Build
 ) { $true }else { $false }
+```
+
+## Git Config
+
+recommended git global configuration
+
+```powershell
+# edit git profile
+git config --global -e
+```
+
+```git
+[user]
+  email = <email@domain.com>
+  name = <Name>
+  username = <UserName>
+[credential]
+  helper = C:/Users/<User>/AppData/Local/Programs/Git\\ Credential\\ Manager/git-credential-manager-core.exe
+[init]
+  defaultBranch = main
+[mergetool "nvim"]
+  cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+[merge]
+  tool = "nvimdiff -f"
+[mergetool]
+  prompt = false
+[core]
+  editor = "nvim -f"
+  pager = "delta"
+[safe]
+  directory = *
+[delta "interactive"]
+  keep-plus-minus-markers = true
 ```
 
 ## Scoop package manager
@@ -161,6 +203,7 @@ if you'd like to install manually or browse for additional apps / packages visit
 
 - neovim
 - extras/windows-terminal
+
 - extras/terminal-icons
 - extras/posh-git
 - extras/psreadline
@@ -190,3 +233,5 @@ if you'd like to install manually or browse for additional apps / packages visit
 - main/ripgrep
 - main/tree-sitter
 - main/wget
+- main/delta
+- main/bat
