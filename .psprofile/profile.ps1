@@ -106,6 +106,10 @@ ForEach ($function in $custom_function_list) {
 }
 #endregion
 
+#region LoadProfileFunctions
+Import-Module "$ProjectRoot\profile_functions.psm1" -Force -ErrorAction SilentlyContinue
+#endregion
+
 #region ImportModules
 # Import Modules
 $ModuleConfigPath = "$RunDir\modules.json"
@@ -253,6 +257,8 @@ if ($PSCore) {
 # for Az CLI Tab completion and preferences
 & "$RunDir\Az.ps1"
 #endregion
+
+Get-ProfileUpdates -Dir $ProjectRoot
 
 # Set Dir
 Set-Location $HomeDir
