@@ -334,13 +334,25 @@ $($remote_last.output)
 -----------------------------------
 "@
     Write-Host -ForegroundColor White "Run " -NoNewline
-    Write-Host -ForegroundColor Yellow "git pull " -NoNewline
-    Write-Host -ForegroundColor White "from your profile directory To get the latest updates..."
-    Write-Host -ForegroundColor White "Then run " -NoNewline
-    Write-Host -ForegroundColor Yellow ".\install.ps1"
+    Write-Host -ForegroundColor Yellow "Install-ProfileUpdates " -NoNewline
+    Write-Host -ForegroundColor White "to update your profile.`r"
   }else{
     Write-Host -ForegroundColor Green "No Updates $($update_string)  ✅"
   }
 }
+
+function Install-ProfileUpdates {
+  Set-Location $env:TERMINAL_PROFILE_ROOT
+  Write-Host -ForegroundColor Cyan "Installing Updates"
+  Write-Host -ForegroundColor Cyan "Pulling Source Code..."
+  $GitInvokes = @(
+    "git fetch --all",
+    "git pull"
+  )
+  $GitInvokes | ForEach-Object { Invoke-Expression $_ }
+  Write-Host -ForegroundColor Cyan "Reinitializing..."
+  Invoke-Expression "$($env:TERMINAL_PROFILE_ROOT)\install.ps1"
+}
+
 
 Export-ModuleMember *-*

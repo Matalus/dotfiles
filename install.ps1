@@ -34,6 +34,7 @@ Catch {
 
 # Load Profile Defaults
 $Defaults = Get-Content $ProfileDir\defaults.yaml | ConvertFrom-Yaml
+#"DEFAULTS"; $Defaults # DEBUG
 
 # Get PowerShell Info from custom function
 $Global:PSInfo = Get-PSInfo
@@ -55,6 +56,18 @@ $TempProfile = Get-PSProfile
 $PS5TempProfile = $TempProfile.PS5Profile
 $PS7TempProfile = $TempProfile.PS7Profile
 
+# Set Environment Variables
+# TERMINAL_PROFILE_ROOT
+Write-Host -ForegroundColor Yellow "Setting Environment Variables..."
+[System.Environment]::SetEnvironmentVariable("TERMINAL_PROFILE_ROOT", $ProfileDir, "Machine")
+[System.Environment]::SetEnvironmentVariable("TERMINAL_PROFILE_HOME", "$($Defaults.home_dir)", "Machine")
+[System.Environment]::SetEnvironmentVariable("TERMINAL_DEFAULT_PROFILE_GUID", "$($Defaults.default_terminal_guid)", "Machine")
+
+# Oh-My-Posh Themes
+[System.Environment]::SetEnvironmentVariable("OMP_THEMES_DIR", "$($ThemesDir)\themes", "Machine")
+[System.Environment]::SetEnvironmentVariable("OMP_NERD_FONT", "$($Defaults.nerd_font)", "Machine")
+[System.Environment]::SetEnvironmentVariable("OMP_DEFAULT_PROMPT", "$($Defaults.posh_prompt)", "Machine")
+
 # Setup Symlinks
 $SymLinkConfigPath = "$ProfileDir\symlinks.yaml"
 $SymLinks = Get-Content $SymLinkConfigPath | ConvertFrom-Yaml
@@ -73,8 +86,8 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
     $create_symlink = $false # assume it could exist, verify in next step
     $SymLinkExists = Get-Item $SymLinkPath -ErrorAction SilentlyContinue | Where-Object { 
       $_.Attributes -match "ReparsePoint" } | Where-Object { 
-        $_.FullName -eq $SymLinkPath -and $_.Target -eq $SymLinkSource 
-      }
+      $_.FullName -eq $SymLinkPath -and $_.Target -eq $SymLinkSource 
+    }
     if ($SymLinkExists) {
       Write-Host -ForegroundColor Green " OK ✅"
       $create_symlink = $false
@@ -107,11 +120,13 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
   $_.Name -match "Microsoft.WindowsTerminal.*" 
 } | Get-ChildItem -Recurse -Include "settings.json"
 
-$DefaultProfile = $TerminalSettings | Where-Object { $_.Name -eq $Defaults.default_terminal }
-
 if ($TermPaths) {
   # Load Default Terminals
   $TerminalSettings = Get-Content "$ProfileDir\terminals.json" | ConvertFrom-Json
+
+  $DefaultProfile = $TerminalSettings | Where-Object { $_.guid -eq $Defaults.default_terminal_guid }
+  #"DEFAULT PROFILE"; $DefaultProfile # DEBUG
+
 
   ForEach ($TermPath in $TermPaths) {
     Try {
@@ -162,13 +177,55 @@ if ($TermPaths) {
   }
 }
 
+# Get Posh Themes
+Write-Host "Getting Oh-My-Posh Themes..."
+$ThemesDir = "$ProjectRoot\.omp"
+$TestThemePath = Test-Path $ThemesDir
+if (!$TestThemePath) {
+  New-Item -ItemType Directory -Path $ThemesDir
+}
+
+#Test for git
+$PoshThemesGit = "$ThemesDir\.git"
+$TestPoshThemesGit = Test-Path $PoshThemesGit
+if (!$TestPoshThemesGit) {
+  Invoke-Expression "git clone https://github.com/JanDeDobbeleer/oh-my-posh.git $($ThemesDir)"
+  Set-Location $ThemesDir
+  $GitInvoke = @(
+    "git sparse-checkout init",
+    "git sparse-checkout set themes",
+    "git pull origin main"
+  )
+  $GitInvoke | ForEach-Object { Invoke-Expression $_ }
+}
+else {
+  Set-Location $ThemesDir
+  Invoke-Expression "git pull"
+}
+
 # Load oh-my-posh
-Import-Module oh-my-posh -Force
+#Import-Module oh-my-posh -Force
+# Try {
+#   Set-PoshPrompt -Theme $Defaults.posh_prompt 
+# }
+# Catch {
+# }
+
+$PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue | Where-Object {
+  $_.Name -match $Defaults.posh_prompt
+}
+$Posh_Init = "oh-my-posh prompt init pwsh"
+if ($PoshTheme) {
+  $Posh_Init += " --config '$($PoshTheme.FullName)'"
+}
+
 Try {
-  Set-PoshPrompt -Theme $Defaults.posh_prompt 
+  $Posh_Init
+  $null = Invoke-Expression -Command $Posh_Init -Verbose
 }
 Catch {
 }
+
 # Set preferred Nerd Font
 Try {
   Set-ConsoleFont -Name $Defaults.nerd_font -Height 17 
@@ -187,9 +244,14 @@ Try {
 }
 Catch {
 }
-Set-PSreadLineOption -PredictionViewStyle ListView -PredictionSource HistoryAndPlugin
+Try {
+  Set-PSreadLineOption -PredictionViewStyle ListView -PredictionSource HistoryAndPlugin
+}
+Catch {}
 
 # TODO Setup WSL Instances
+# make sure env variables are refreshed
+RefreshEnv.cmd
 
 # Run PS7 Profile
 & $PROFILE.CurrentUserAllHosts

@@ -4,3 +4,4 @@
 .vscode/settings.json
 .nvim/PowerShellEditorServices.json
 .psprofile/Cred.csv
+.omp

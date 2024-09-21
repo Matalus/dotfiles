@@ -16,7 +16,7 @@ $RunDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
 # Check PSGallery Trust Status
 $PSGalleryState = Get-PSRepository -Name "PSGallery" -ErrorAction SilentlyContinue
-if($PSGalleryState.InstallationPolicy -eq "Untrusted"){
+if ($PSGalleryState.InstallationPolicy -eq "Untrusted") {
   Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 }
 
@@ -189,16 +189,11 @@ else {
 }
 #endregion
 
+# Set Posh Prompt
 Try {
-  Invoke-Expression "$(oh-my-posh prompt init pwsh)" -ErrorAction SilentlyContinue
+  Set-PoshPrompt -Theme $env:OMP_DEFAULT_PROMPT
 }
-Catch {
-}
-Try {
-  Set-PoshPrompt -Theme $CurrentTheme -ErrorAction SilentlyContinue
-}
-Catch {
-}
+Catch {}
 
 #region PSReadLine
 # Set PSReadLine Options and Macros
