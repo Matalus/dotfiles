@@ -15,6 +15,7 @@ apps:
   - main/fzf # Required for Neovim
   - main/grep # Grep for windows
   - main/gzip # Required for Neovim
+  - main/unzip # Required for Neovim
   - main/micro # Micro (fork of nano)
   - main/mingw # Required for Neovim (compiler)
   - main/ripgrep # Required for Neovim
@@ -26,6 +27,7 @@ apps:
   - main/delta # Git Diff Highlighting
   - main/bat # visual version of 'cat'
   - main/nodejs-lts # NodeJS
+  - main/mercurial # mercurial
   - extras/vcredist2022 # Required for Neovim
   - extras/windows-terminal # Terminal Customizaton
   - extras/terminal-icons # Terminal Customizaton
