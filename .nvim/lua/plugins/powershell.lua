@@ -23,24 +23,24 @@ return {
   {
     "JayDoubleu/vim-pwsh-formatter",
   },
-  {
-    "Willem-J-an/nvim-dap-powershell",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "mfussenegger/nvim-dap",
-      "rcarriga/nvim-dap-ui",
-      {
-        "m00qek/baleia.nvim",
-        lazy = true,
-        tag = "v1.4.0",
-      },
-    },
-    config = function()
-      require("dap-powershell").setup({
-        include_configs = true,
-        pwsh_executable = "pwsh",
-        pses_bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
-      })
-    end,
-  },
+  -- {
+  --   "Willem-J-an/nvim-dap-powershell",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "mfussenegger/nvim-dap",
+  --     "rcarriga/nvim-dap-ui",
+  --     {
+  --       "m00qek/baleia.nvim",
+  --       lazy = true,
+  --       tag = "v1.4.0",
+  --     },
+  --   },
+  --   config = function()
+  --     require("dap-powershell").setup({
+  --       include_configs = true,
+  --       pwsh_executable = "pwsh",
+  --       pses_bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
+  --     })
+  --   end,
+  -- },
 }
