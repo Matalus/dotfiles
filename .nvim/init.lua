@@ -32,7 +32,7 @@ vim.o.shellredir = "2>&1 | Out-File -Encoding UTF8 %s: exit $LastExitCode"
 vim.o.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s: exit $LastExitCode"
 vim.o.shellquote = ""
 vim.o.shellxquote = ""
-
+vim.o.inccommand = "split"
 -- require("powershell").setup {
 --     bundle_path = vim.fn.stdpath "data" .. "/mason/packages/powershell-editor-services",
 --   }

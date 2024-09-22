@@ -1,5 +1,7 @@
+.ps5shim/Modules
 .psprofile/Modules
 .psprofile/custom_modules/ps_functions.psm1
 .vscode/settings.json
 .nvim/PowerShellEditorServices.json
 .psprofile/Cred.csv
+.omp

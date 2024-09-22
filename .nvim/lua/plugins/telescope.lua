@@ -3,6 +3,7 @@ return {
     defaults = {
       vimgrep_arguments = {
         'rg',
+        '--no-ignore',
         '-L',
         '--hidden',
         '--line-number',

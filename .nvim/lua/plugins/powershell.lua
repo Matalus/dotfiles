@@ -36,7 +36,11 @@ return {
       },
     },
     config = function()
-      require("dap-powershell").setup()
+      require("dap-powershell").setup({
+        include_configs = true,
+        pwsh_executable = "pwsh",
+        pses_bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
+      })
     end,
   },
 }

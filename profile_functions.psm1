@@ -37,7 +37,7 @@ function Install-Scoop ($PSInfo) {
 }
 
 # Return status of scoop packages
-function Get-ScoopPackages ($ScoopConfigPath,$PSInfo) {
+function Get-ScoopPackages ($ScoopConfigPath, $PSInfo) {
   # Confirm that Scoop is installed
   Write-Host "Scoop Installed:" -NoNewline
   $TestScoop = Try { Get-Command -Name "scoop.cmd" -ErrorAction SilentlyContinue }Catch {
@@ -49,12 +49,13 @@ function Get-ScoopPackages ($ScoopConfigPath,$PSInfo) {
     Write-Host -ForegroundColor Red " Not Installed"
     Write-Host -ForegroundColor Cyan "Attempting to Install Scoop..."
     Install-Scoop
-  }else{
+  }
+  else {
     Write-Host -ForegroundColor Green " OK ✅"
   }
 
-    # Load Scoop Config
-    $ScoopConfig = ( Get-Content $ScoopConfigPath ) -join "`n" | ConvertFrom-Yaml
+  # Load Scoop Config
+  $ScoopConfig = ( Get-Content $ScoopConfigPath ) -join "`n" | ConvertFrom-Yaml
 
   # Get Required Scoop Apps
   $ScoopAppsRequired = $ScoopConfig.Apps
@@ -70,17 +71,18 @@ function Get-ScoopPackages ($ScoopConfigPath,$PSInfo) {
   # Get Installed Scoop Buckets
   [array]$ScoopBuckets = Invoke-Expression "scoop bucket list" 6>$null
 
-    $padvalue = ($ScoopAppsRequired | ForEach-Object {$_.Length} | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum) + 3
-    # check for installed buckets and add missing
-    ForEach($Bucket in $ScoopBucketsRequired){
-      Write-Host -ForegroundColor White "-> $($Bucket):".PadRight(100).Substring(0,$padvalue) -NoNewline
-      if($Bucket -notin $ScoopBuckets.Name){
-        Write-Host -ForegroundColor Yellow " missing ⚠️"
-        Invoke-Expression "scoop bucket add $($Bucket)"
-      }else{
-        Write-Host -ForegroundColor Green " OK ✅"
-      }
+  $padvalue = ($ScoopAppsRequired | ForEach-Object { $_.Length } | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum) + 3
+  # check for installed buckets and add missing
+  ForEach ($Bucket in $ScoopBucketsRequired) {
+    Write-Host -ForegroundColor White "-> $($Bucket):".PadRight(100).Substring(0, $padvalue) -NoNewline
+    if ($Bucket -notin $ScoopBuckets.Name) {
+      Write-Host -ForegroundColor Yellow " missing ⚠️"
+      Invoke-Expression "scoop bucket add $($Bucket)"
     }
+    else {
+      Write-Host -ForegroundColor Green " OK ✅"
+    }
+  }
 
   Write-Host "Verifying Scoop Apps..."
   # Get List of Installed Scoop Apps
@@ -89,19 +91,19 @@ function Get-ScoopPackages ($ScoopConfigPath,$PSInfo) {
   }
 
   # check for Installed apps and add missing
-  ForEach($App in $ScoopAppsRequired){
-    Write-Host "-> $($App):".PadRight(100).Substring(0,$padvalue) -NoNewLine
-    if($App -notin $ScoopApps){
+  ForEach ($App in $ScoopAppsRequired) {
+    Write-Host "-> $($App):".PadRight(100).Substring(0, $padvalue) -NoNewLine
+    if ($App -notin $ScoopApps) {
       Write-Host -ForegroundColor Yellow "missing "
       Invoke-Expression "scoop install $($App)"
-    }else{
+    }
+    else {
       Write-Host -ForegroundColor Green " OK ✅"
     }
   }
 }
 
-if (-not ("Windows.Native.Kernel32" -as [type]))
-{
+if (-not ("Windows.Native.Kernel32" -as [type])) {
   Add-Type -TypeDefinition @"
     namespace Windows.Native
     {
@@ -252,23 +254,16 @@ if (-not ("Windows.Native.Kernel32" -as [type]))
 "@
 }
 
-# Get PS Profile Paths
-function Get-PSProfile {
-  return [pscustomobject]@{
-    PS7Profile = & "pwsh.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { split-path -Parent $_ } ;
-    PS5Profile = & "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { split-path -Parent $_ } ;
-  }
-}
-function Set-ConsoleFont
-{
+
+function Set-ConsoleFont {
   [CmdletBinding()]
   param
   (
-    [Parameter(Mandatory=$true, Position=0)]
+    [Parameter(Mandatory = $true, Position = 0)]
     [ValidateNotNullOrEmpty()]
     [string] $Name,
-    [Parameter(Mandatory=$true, Position=1)]
-    [ValidateRange(5,72)]
+    [Parameter(Mandatory = $true, Position = 1)]
+    [ValidateRange(5, 72)]
     [int] $Height
   )
   
@@ -280,5 +275,83 @@ function Set-ConsoleFont
   $cfi.FontHeight = $Height
   [Windows.Native.Kernel32]::SetCurrentConsoleFontEx($cfi)
 }
+
+# Get PS Profile Paths
+function Get-PSProfile {
+  return [pscustomobject]@{
+    PS7Profile = & "pwsh.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { split-path -Parent $_ } ;
+    PS5Profile = & "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { split-path -Parent $_ } ;
+  }
+}
+
+function Invoke-NativeCommand ($Cmd,$ProcArgs,$WorkDir){
+  # Create Process Info Object
+  $proc_info = [System.Diagnostics.ProcessStartInfo]::new()
+  $proc_info.FileName = $Cmd
+  $proc_info.WorkingDirectory = $WorkDir
+  $proc_info.Arguments = $ProcArgs
+  $proc_info.RedirectStandardError = $true
+  $proc_info.RedirectStandardOutput = $true
+  $proc_info.UseShellExecute = $false
+  # Run Process
+  Try{
+    $proc = [System.Diagnostics.Process]::new()
+    $proc.StartInfo = $proc_info
+    $proc.Start() | Out-Null
+    $proc.WaitForExit()
+    $proc_out = $proc.StandardOutput.ReadToEnd()
+    $proc_err = $proc.StandardError.ReadToEnd()
+    [timespan]$RunTime = $proc.ExitTime - $proc.StartTime
+    $proc.Dispose()
+  }Catch{
+    $proc.Dispose()
+  }
+  return [pscustomobject]@{
+    output = $proc_out
+    error = $proc_err
+    runtime = $RunTime
+  }
+}
+
+function Get-ProfileUpdates ($Dir) {
+  $remoteurl = Invoke-NativeCommand -Cmd "git.exe" -ProcArgs "remote -v" -WorkDir $Dir
+  $remote_fetch = $remoteurl.output -split "`n" | Select-Object -First 1
+  Write-Host -ForegroundColor White "Checking for Updates on: " -NoNewline
+  Write-Host -ForegroundColor Cyan $remote_fetch
+  $fetch = Invoke-NativeCommand -Cmd 'git.exe' -ProcArgs "fetch" -WorkDir $Dir
+  
+  $local = Invoke-NativeCommand -Cmd 'git.exe' -ProcArgs 'rev-parse HEAD' -WorkDir $Dir
+  $remote = Invoke-NativeCommand -Cmd 'git.exe' -ProcArgs 'rev-parse origin/main' -WorkDir $Dir
+  $remote_last = Invoke-NativeCommand -Cmd 'git.exe' -ProcArgs "log origin/main -n 1" -WorkDir $Dir
+
+  $update_string = "[local: $($local.output.Substring(0,7)) remote: $($remote.output.Substring(0,7))]"
+
+  if($local.output -ne $remote.output){
+    Write-Host -ForegroundColor Yellow "Pending Updates $($update_string) ⚠️"
+    Write-Host @"
+-----------------------------------
+$($remote_last.output)
+-----------------------------------
+"@
+    Write-Host -ForegroundColor White "Run " -NoNewline
+    Write-Host -ForegroundColor Yellow "Install-ProfileUpdates" -NoNewline
+  }else{
+    Write-Host -ForegroundColor Green "No Updates $($update_string)  ✅"
+  }
+}
+
+function Install-ProfileUpdates {
+  Set-Location $env:TERMINAL_PROFILE_ROOT
+  Write-Host -ForegroundColor Cyan "Installing Updates"
+  Write-Host -ForegroundColor Cyan "Pulling Source Code..."
+  $GitInvokes = @(
+    "git fetch --all",
+    "git pull"
+  )
+  $GitInvokes | ForEach-Object { Invoke-Expression $_ }
+  Write-Host -ForegroundColor Cyan "Reinitializing..."
+  Invoke-Expression "$($env:TERMINAL_PROFILE_ROOT)\install.ps1"
+}
+
 
 Export-ModuleMember *-*
