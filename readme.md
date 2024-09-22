@@ -7,8 +7,16 @@
   <img src="https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg" alt="Quick Install" width="800"/>
 </a>
 
-1. Go the the parent directory where you want the repo to exist (ex. `c:\src`)
-2. Run the following command as **Administrator** in PowerShell
+1. Ensure that `pwsh` and `git` are installed
+
+```PowerShell
+winget install --id Microsoft.PowerShell --exact;
+winget install --ig Git.Git --exact;
+
+```
+
+2. Go the the parent directory where you want the repo to exist (ex. `c:\src`)
+3. Run the following command as **Administrator** in PowerShell
 
 ```PowerShell
 # Clones Repo to directory and runs installer script
@@ -137,7 +145,9 @@ Method for getting latest version of powershell from winget
 *manually*
 
 ```powershell
-winget install --id Microsoft.PowerShell --exact
+winget install --id Microsoft.PowerShell --exact;
+winget install --ig Git.Git --exact;
+
 ```
 
 *programmatically*
