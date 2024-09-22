@@ -32,9 +32,14 @@ Catch {
   Write-Host -ForegroundColor Red " Fail ❌"
 }
 
+# Cleanup PS Module version of oh-my-posh
+Get-Module oh-my-posh -ListAvailable -ErrorAction SilentlyContinue | Uninstall-Module -Force -Verbose
+
 # Load Profile Defaults
 $Defaults = Get-Content $ProfileDir\defaults.yaml | ConvertFrom-Yaml
 #"DEFAULTS"; $Defaults # DEBUG
+Write-Host "Defaults Loaded"
+$Defaults
 
 # Get PowerShell Info from custom function
 $Global:PSInfo = Get-PSInfo
@@ -58,15 +63,18 @@ $PS7TempProfile = $TempProfile.PS7Profile
 
 # Set Environment Variables
 # TERMINAL_PROFILE_ROOT
-Write-Host -ForegroundColor Yellow "Setting Environment Variables..."
-[System.Environment]::SetEnvironmentVariable("TERMINAL_PROFILE_ROOT", $ProfileDir, "Machine")
-[System.Environment]::SetEnvironmentVariable("TERMINAL_PROFILE_HOME", "$($Defaults.home_dir)", "Machine")
-[System.Environment]::SetEnvironmentVariable("TERMINAL_DEFAULT_PROFILE_GUID", "$($Defaults.default_terminal_guid)", "Machine")
+# Write-Host -ForegroundColor Yellow "Setting Environment Variables..."
+# [System.Environment]::SetEnvironmentVariable("TERMINAL_PROFILE_ROOT", $ProfileDir, "Machine")
+# [System.Environment]::SetEnvironmentVariable("TERMINAL_PROFILE_HOME", "$($Defaults.home_dir)", "Machine")
+# [System.Environment]::SetEnvironmentVariable("TERMINAL_DEFAULT_PROFILE_GUID", "$($Defaults.default_terminal_guid)", "Machine")
 
-# Oh-My-Posh Themes
-[System.Environment]::SetEnvironmentVariable("OMP_THEMES_DIR", "$($ThemesDir)\themes", "Machine")
-[System.Environment]::SetEnvironmentVariable("OMP_NERD_FONT", "$($Defaults.nerd_font)", "Machine")
-[System.Environment]::SetEnvironmentVariable("OMP_DEFAULT_PROMPT", "$($Defaults.posh_prompt)", "Machine")
+# Oh-My-Posh Environment Variables
+$TERM_PROFILE_ENV_VARS = @{
+  "TERMINAL_PROFILE_ROOT"     = $ProfileDir
+  "TERMINAL_PROFILE_HOME"      = $Defaults.home_dir
+  "TERMINAL_DEFAULT_PROFILE_GUID" = $Defaults.posh_prompt
+}
+Set-ProfileEnvironment -Variables $TERM_PROFILE_ENV_VARS
 
 # Setup Symlinks
 $SymLinkConfigPath = "$ProfileDir\symlinks.yaml"
@@ -202,29 +210,15 @@ else {
   Set-Location $ThemesDir
   Invoke-Expression "git pull"
 }
+Write-Host "Found: $(Get-ChildItem "$ThemesDir\themes" | Measure-Object -Property Count | Select-Object -ExpandProperty Count) Themes in: $($ThemesDir)"
 
-# Load oh-my-posh
-#Import-Module oh-my-posh -Force
-# Try {
-#   Set-PoshPrompt -Theme $Defaults.posh_prompt 
-# }
-# Catch {
-# }
-
-$PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue | Where-Object {
-  $_.Name -match $Defaults.posh_prompt
+# Oh-My-Posh Environment Variables
+$POSH_ENV_VARS = @{
+  "OMP_THEMES_DIR"     = "$($ThemesDir)\themes"
+  "OMP_NERD_FONT"      = "$($Defaults.nerd_font)"
+  "OMP_DEFAULT_PROMPT" = "$($Defaults.posh_prompt)"
 }
-$Posh_Init = "oh-my-posh prompt init pwsh"
-if ($PoshTheme) {
-  $Posh_Init += " --config '$($PoshTheme.FullName)'"
-}
-
-Try {
-  $Posh_Init
-  $null = Invoke-Expression -Command $Posh_Init -Verbose
-}
-Catch {
-}
+Set-ProfileEnvironment -Variables $POSH_ENV_VARS
 
 # Set preferred Nerd Font
 Try {
@@ -249,9 +243,19 @@ Try {
 }
 Catch {}
 
+# Cleanup PS Module version of oh-my-posh
+Get-Module oh-my-posh -ListAvailable | Uninstall-Module -Force -Verbose
+
+Try {
+  #$global:OMP_GLOBAL_SESSIONSTATE = $PSCmdlet.SessionState
+  Write-Host "Initializing Oh-My-Posh..."
+  Initialize-OhMyPosh
+}
+Catch {}
+
 # TODO Setup WSL Instances
 # make sure env variables are refreshed
-RefreshEnv.cmd
+#RefreshEnv.cmd
 
 # Run PS7 Profile
 & $PROFILE.CurrentUserAllHosts

@@ -421,6 +421,6 @@ Set-PSReadLineKeyHandler -Key Alt+a `
 #     [Microsoft.PowerShell.PSConsoleReadLine]::Insert($unicode)
 # }
 
-Set-PSReadLineOption -PromptText '> '
+# Set-PSReadLineOption -PromptText '> '
 
 Write-Host -ForegroundColor Green "done"

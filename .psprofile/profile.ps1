@@ -84,11 +84,6 @@ else {
 }
 #endregion
 
-# Workaround for get-location/push-location/pop-location from within a module
-# https://github.com/PowerShell/PowerShell/issues/12868
-# https://github.com/JanDeDobbeleer/oh-my-posh2/issues/113
-$global:OMP_GLOBAL_SESSIONSTATE = $PSCmdlet.SessionState
-
 #region ImportCustom
 # Import Custom Function modules
 $custom_function_list = Get-ChildItem "$RunDir\custom_modules" -Filter *.psm1 -ErrorAction SilentlyContinue
@@ -189,11 +184,7 @@ else {
 }
 #endregion
 
-# Set Posh Prompt
-Try {
-  Set-PoshPrompt -Theme $env:OMP_DEFAULT_PROMPT
-}
-Catch {}
+
 
 #region PSReadLine
 # Set PSReadLine Options and Macros
@@ -251,6 +242,19 @@ if ($PSCore) {
 #region azcli
 # for Az CLI Tab completion and preferences
 & "$RunDir\Az.ps1"
+#endregion
+
+#region OMP
+# Workaround for get-location/push-location/pop-location from within a module
+# https://github.com/PowerShell/PowerShell/issues/12868
+# https://github.com/JanDeDobbeleer/oh-my-posh2/issues/113
+Try {
+  #$global:OMP_GLOBAL_SESSIONSTATE = $PSCmdlet.SessionState
+  Initialize-OhMyPosh
+}
+Catch {
+
+}
 #endregion
 
 Get-ProfileUpdates -Dir $ProjectRoot

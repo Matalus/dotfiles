@@ -284,7 +284,7 @@ function Get-PSProfile {
   }
 }
 
-function Invoke-NativeCommand ($Cmd,$ProcArgs,$WorkDir){
+function Invoke-NativeCommand ($Cmd, $ProcArgs, $WorkDir) {
   # Create Process Info Object
   $proc_info = [System.Diagnostics.ProcessStartInfo]::new()
   $proc_info.FileName = $Cmd
@@ -294,7 +294,7 @@ function Invoke-NativeCommand ($Cmd,$ProcArgs,$WorkDir){
   $proc_info.RedirectStandardOutput = $true
   $proc_info.UseShellExecute = $false
   # Run Process
-  Try{
+  Try {
     $proc = [System.Diagnostics.Process]::new()
     $proc.StartInfo = $proc_info
     $proc.Start() | Out-Null
@@ -303,12 +303,13 @@ function Invoke-NativeCommand ($Cmd,$ProcArgs,$WorkDir){
     $proc_err = $proc.StandardError.ReadToEnd()
     [timespan]$RunTime = $proc.ExitTime - $proc.StartTime
     $proc.Dispose()
-  }Catch{
+  }
+  Catch {
     $proc.Dispose()
   }
   return [pscustomobject]@{
-    output = $proc_out
-    error = $proc_err
+    output  = $proc_out
+    error   = $proc_err
     runtime = $RunTime
   }
 }
@@ -326,7 +327,7 @@ function Get-ProfileUpdates ($Dir) {
 
   $update_string = "[local: $($local.output.Substring(0,7)) remote: $($remote.output.Substring(0,7))]"
 
-  if($local.output -ne $remote.output){
+  if ($local.output -ne $remote.output) {
     Write-Host -ForegroundColor Yellow "Pending Updates $($update_string) ⚠️"
     Write-Host @"
 -----------------------------------
@@ -336,7 +337,8 @@ $($remote_last.output)
     Write-Host -ForegroundColor White "Run " -NoNewline
     Write-Host -ForegroundColor Yellow "Install-ProfileUpdates " -NoNewline
     Write-Host -ForegroundColor White "to update your profile.`r"
-  }else{
+  }
+  else {
     Write-Host -ForegroundColor Green "No Updates $($update_string)  ✅"
   }
 }
@@ -352,6 +354,41 @@ function Install-ProfileUpdates {
   $GitInvokes | ForEach-Object { Invoke-Expression $_ }
   Write-Host -ForegroundColor Cyan "Reinitializing..."
   Invoke-Expression "$($env:TERMINAL_PROFILE_ROOT)\install.ps1"
+}
+
+# TODO set env variables
+function Set-ProfileEnvironment ([hashtable]$Variables) {
+  $NameLen = $Variables.GetEnumerator() | ForEach-Object {
+    $($_.Name.Length) 
+  } | Sort-Object -Descending | Select-Object -First 1
+  $ValLen = $Variables.GetEnumerator() | ForEach-Object {
+    $($_.Value.Length) 
+  } | Sort-Object -Descending | Select-Object -First 1
+
+  
+  ForEach ($Variable in $Variables.GetEnumerator()) {
+    Write-Host -ForegroundColor White "Setting Environment Variable: " -NoNewline
+    Write-Host -ForegroundColor Magenta "$($Variable.Name)".PadRight(100).Substring(0,($NameLen +2)) -NoNewline
+    Write-Host "= $($Variable.Value): ".PadRight(200).Substring(0,($ValLen + 2)) -NoNewline
+    # Set Environment Variable
+    [System.Environment]::SetEnvironmentVariable($Variable.Name, $Variable.Value, "Machine")
+    Write-Host -ForegroundColor Green " done ✅"
+  }
+}
+# required workaround for occasionally missing function during profile reloads
+function Get-PoshStackCount { (Get-Location -Stack).Count }
+
+# init oh my posh
+function Initialize-OhMyPosh {
+  $PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue | Where-Object {
+    $_.Name -match $env:OMP_DEFAULT_PROMPT
+  }
+  Try {
+    $null = oh-my-posh init pwsh --config $PoshTheme.FullName | Invoke-Expression -ErrorAction SilentlyContinue
+  }
+  Catch {
+    $null = oh-my-posh init pwsh | Invoke-Expression
+  }
 }
 
 

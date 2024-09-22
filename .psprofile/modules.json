@@ -1,37 +1,32 @@
 [
-    {
-        "Name": "posh-git",
-        "MinVer": "1.0.0",
-        "PSCore": false
-    },
-    {
-        "Name": "oh-my-posh",
-        "MinVer": "6.14.0",
-        "PSCore": false
-    },
-    {
-        "Name": "Terminal-Icons",
-        "MinVer": "0.7.1",
-        "PSCore": false
-    },
-    {
-        "Name": "PSReadLine",
-        "MinVer": "2.4.0-beta0",
-        "PSCore": true
-    },
-    {
-        "Name": "PowerShell-Yaml",
-        "MinVer": "0.4.7",
-        "PSCore": false
-    },
-    {
-        "Name": "PowerShellRun",
-        "MinVer": "0.7.0",
-        "PSCore": true
-    },
-    {
-        "Name": "Microsoft.PowerShell.ConsoleGuiTools",
-        "MinVer": "0.7.7",
-        "PSCore": true
-    }
+  {
+    "Name": "posh-git",
+    "MinVer": "1.0.0",
+    "PSCore": false
+  },
+  {
+    "Name": "Terminal-Icons",
+    "MinVer": "0.7.1",
+    "PSCore": false
+  },
+  {
+    "Name": "PSReadLine",
+    "MinVer": "2.4.0-beta0",
+    "PSCore": true
+  },
+  {
+    "Name": "PowerShell-Yaml",
+    "MinVer": "0.4.7",
+    "PSCore": false
+  },
+  {
+    "Name": "PowerShellRun",
+    "MinVer": "0.7.0",
+    "PSCore": true
+  },
+  {
+    "Name": "Microsoft.PowerShell.ConsoleGuiTools",
+    "MinVer": "0.7.7",
+    "PSCore": true
+  }
 ]
