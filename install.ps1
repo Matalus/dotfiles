@@ -60,6 +60,8 @@ $TempProfile = Get-PSProfile
 # temp globals for Symlinks
 $env:PSWIN_PROFILE_DIR = $TempProfile.PS5Profile
 $env:PSCORE_PROFILE_DIR = $TempProfile.PS7Profile
+# temp profile root
+$env:TERMINAL_PROFILE_ROOT = $ProfileDir
 # Terminal Profile Static Variables
 $TERM_PROFILE_ENV_VARS = @{
   "PSWIN_PROFILE_DIR" = $TempProfile.PS5Profile
@@ -204,7 +206,7 @@ if ($TermPaths)
 
 # Get Posh Themes
 Write-Host "Getting Oh-My-Posh Themes..."
-$ThemesDir = "$Pr -ErrorAction SilentlyContinueojectRoot\.omp"
+$ThemesDir = "$($ProfileDir)\.omp"
 $TestThemePath = Test-Path $ThemesDir
 if (!$TestThemePath)
 {
