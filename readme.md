@@ -134,31 +134,18 @@ Neovim looks for it's configuration by default on windows in this directory.
 
 Method for getting latest version of powershell from winget
 
-```powershell
-$winget = winget search --Id Microsoft.PowerShell --exact;
-$PSLatest = $winget | where-object {
-  $_ -match "Microsoft.PowerShell"
-} | ForEach-Object { 
-  $_ -split "\s+" | Select-Object -Index 2 
-}
-```
+*manually*
 
 ```powershell
-Get-Command pwsh -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
+winget install --id Microsoft.PowerShell --exact
 ```
 
-This method might work better
+*programmatically*
 
-```PowerShell
-$UpdateCheck = [pscustomobject]@{
-  Current=[version]($PSVersionTable.PSVersion | Select-Object Major,Minor,@{N="Build";E={$_.Patch}});
-  Latest=[version](Invoke-RestMethod -Uri "https://aka.ms/pwsh-buildinfo-stable" | Select-Object -ExpandProperty  ReleaseTag | %{ $_ -replace "v"}) | Select-Object Major,Minor,Build
-}
-$NoUpdate = if (
-   $UpdateCheck.Current.Major -eq $UpdateCheck.Latest.Major -and
-   $UpdateCheck.Current.Minor -eq $UpdateCheck.Latest.Minor -and
-   $UpdateCheck.Current.Build -eq $UpdateCheck.Latest.Build
-) { $true }else { $false }
+```powershell
+# Profile Module Function\
+# Invoked when running .\Install.ps1
+Update-PowerShellCore
 ```
 
 ## Git Config

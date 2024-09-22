@@ -368,8 +368,8 @@ function Set-ProfileEnvironment ([hashtable]$Variables) {
   
   ForEach ($Variable in $Variables.GetEnumerator()) {
     Write-Host -ForegroundColor White "Setting Environment Variable: " -NoNewline
-    Write-Host -ForegroundColor Magenta "$($Variable.Name)".PadRight(100).Substring(0,($NameLen +2)) -NoNewline
-    Write-Host "= $($Variable.Value): ".PadRight(200).Substring(0,($ValLen + 2)) -NoNewline
+    Write-Host -ForegroundColor Magenta "$($Variable.Name)".PadRight(100).Substring(0, ($NameLen + 2)) -NoNewline
+    Write-Host "= $($Variable.Value): ".PadRight(200).Substring(0, ($ValLen + 2)) -NoNewline
     # Set Environment Variable
     [System.Environment]::SetEnvironmentVariable($Variable.Name, $Variable.Value, "Machine")
     Write-Host -ForegroundColor Green " done ✅"
@@ -388,6 +388,36 @@ function Initialize-OhMyPosh {
   }
   Catch {
     $null = oh-my-posh init pwsh | Invoke-Expression
+  }
+}
+
+function Update-PowerShellCore {
+  $UpdateCheck = [pscustomobject]@{
+    Current = [version]$PSVersionTable.PSVersion | Select-Object Major, Minor, Build;
+    Latest  = [version](Invoke-RestMethod -Uri "https://aka.ms/pwsh-buildinfo-stable" | Select-Object -ExpandProperty  ReleaseTag | % { $_ -replace "v" }) | Select-Object Major, Minor, Build
+  }
+  $CurrentSemantic = ($UpdateCheck.Current.psobject.properties | ForEach-Object { $_.Value }) -join "."
+  $LatestSemantic = ($UpdateCheck.Latest.psobject.properties | ForEach-Object { $_.Value }) -join "."
+  $VersionSummary = "[ current: $($CurrentSemantic) latest: $($LatestSemantic) ]"
+
+  $NoUpdate = if (
+    $UpdateCheck.Current.Major -eq $UpdateCheck.Latest.Major -and
+    $UpdateCheck.Current.Minor -eq $UpdateCheck.Latest.Minor -and
+    $UpdateCheck.Current.Build -eq $UpdateCheck.Latest.Build
+  ) { $true }else { $false }
+  if ($NoUpdate) {
+    Write-Host "PowerShell is up to date $VersionSummary"
+  }
+  else {
+    Write-Host "PowerShell needs to be updated $VersionSummary"
+    if (!(Get-Command -Name pwsh -ErrorAction SilentlyContinue)) {
+      winget install --id Microsoft.PowerShell --exact
+    }
+    else {
+      Write-Host -ForegroundColor White "Run " -NoNewline
+      Write-Host -ForegroundColor Yellow "winget install --id Microsoft.PowerShell --exact"
+      EXIT
+    }
   }
 }
 

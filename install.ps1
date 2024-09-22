@@ -32,6 +32,9 @@ Catch {
   Write-Host -ForegroundColor Red " Fail ❌"
 }
 
+# Make sure PowerShell is up to date
+Update-PowerShellCore
+
 # Cleanup PS Module version of oh-my-posh
 Get-Module oh-my-posh -ListAvailable -ErrorAction SilentlyContinue | Uninstall-Module -Force -Verbose
 
