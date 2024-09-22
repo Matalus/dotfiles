@@ -71,10 +71,25 @@ Will attempt to locate and patch the Windows Terminal `settings.json` to include
 - Oh-My-Posh (default **half-life** theme) change in `defaults.yaml`
 - PSReadline Customization (based on [SamplePSReadLineProfile.ps1](https://github.com/PowerShell/PSReadLine/blob/master/PSReadLine/SamplePSReadLineProfile.ps1))
 - [Terminal-Icons](https://github.com/devblackops/Terminal-Icons)
-![install](img/install.jpg)
+- Automatic Update Checks
 
-**profile.ps1**
-![profile](img/profile.jpg)
+  > *updates available*
+
+  <img src="img/profile_needs_update.jpg" height="200">
+
+  > *up to date*
+
+  <img src="img/profile_up_to_date.jpg" height="60">
+
+- `bat` (visual version of `cat` with syntax highlighting)
+
+  <img src="img/bat.jpg" height="300">
+
+- `delta` (enhanced diff viewer, inline highlights)
+
+  <img src="img/delta.jpg" height="250">
+
+
 
 ## Neovim Setup (LazyVim)
 

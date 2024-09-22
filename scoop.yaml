@@ -25,7 +25,6 @@ apps:
   - main/zoxide # Directory utility
   - main/delta # Git Diff Highlighting
   - main/bat # visual version of 'cat'
-  - main/less
   - extras/vcredist2022 # Required for Neovim
   - extras/windows-terminal # Terminal Customizaton
   - extras/terminal-icons # Terminal Customizaton
