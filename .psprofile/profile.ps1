@@ -260,4 +260,8 @@ Catch {
 Get-ProfileUpdates -Dir $ProjectRoot
 
 # Set Dir
+$TestHomeDir = Test-Path $HomeDir
+if(!$TestHomeDir){
+  $null = New-Item -ItemType Directory $HomeDir
+}
 Set-Location $HomeDir

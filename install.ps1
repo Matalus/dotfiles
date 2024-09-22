@@ -72,8 +72,6 @@ $TERM_PROFILE_ENV_VARS = @{
 }
 Set-ProfileEnvironment -Variables $TERM_PROFILE_ENV_VARS
 
-RefreshEnv.cmd
-
 # Setup Symlinks
 $SymLinkConfigPath = "$ProfileDir\symlinks.yaml"
 $SymLinks = Get-Content $SymLinkConfigPath | ConvertFrom-Yaml
@@ -224,22 +222,6 @@ Try {
 }
 Catch {
 }
-# Load Terminal Icons
-Try {
-  Import-Module Terminal-Icons -Force 
-}
-Catch {
-}
-# Perform basic PSReadline config
-Try {
-  Import-Module PSReadLine -Force 
-}
-Catch {
-}
-Try {
-  Set-PSreadLineOption -PredictionViewStyle ListView -PredictionSource HistoryAndPlugin
-}
-Catch {}
 
 # Cleanup PS Module version of oh-my-posh
 Get-Module oh-my-posh -ListAvailable | Uninstall-Module -Force -Verbose
