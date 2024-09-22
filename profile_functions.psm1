@@ -24,12 +24,21 @@ function Get-PSInfo {
 
 # Install Scoop
 function Install-Scoop ($PSInfo) {
-  Write-Host "Installing Scoop..."
-  if ($PSInfo.PSAdmin) {
+  Write-Host "Installing Scoop " -NoNewline
+  if ($PSInfo.is_admin) {
+    Write-Host "As Admin..."
     # Run scoop admin install
-    Invoke-Expression "& {$(Invoke-RestMethod get.scoop.sh)} -RunAsAdmin"
+    Try {
+      iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+    }
+    Catch {
+      # Install scoop in regular mode
+      Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+      Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression 
+    }
   }
   else {
+    Write-Host "As CurrentUser..."
     # Install scoop in regular mode
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
     Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression 
@@ -48,7 +57,7 @@ function Get-ScoopPackages ($ScoopConfigPath, $PSInfo) {
   if (!($TestScoop)) {
     Write-Host -ForegroundColor Red " Not Installed"
     Write-Host -ForegroundColor Cyan "Attempting to Install Scoop..."
-    Install-Scoop
+    Install-Scoop -PSInfo $PSInfo
   }
   else {
     Write-Host -ForegroundColor Green " OK ✅"
