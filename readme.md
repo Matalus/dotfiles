@@ -1,11 +1,15 @@
 # Windots
 
-## Quick Installation
+## One-Line Installation
 
-  <a href="https://youtube.com/watch?v=2xkyf9uLK5M">
+> Clean installation on VirtualBox Windows 11 Dev OVA
 
-  <img src="https://img.youtube.com/vi/2xkyf9uLK5M/maxresdefault.jpg" alt="Quick Install" width="800"/>
+  <a href="https://youtube.com/watch?v=DykhkRQmmyw">
+
+  <img src="https://img.youtube.com/vi/DykhkRQmmyw/maxresdefault.jpg" alt="One-Line Install" width="800"/>
 </a>
+
+> Ok.. technically a 3-liner if you don't have `git` and `pwsh` installed
 
 1. Ensure that `pwsh` and `git` are installed
 
