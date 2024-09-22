@@ -34,7 +34,7 @@ Catch {
 
 # Load Profile Defaults
 $Defaults = Get-Content $ProfileDir\defaults.yaml | ConvertFrom-Yaml
-"DEFAULTS"; $Defaults # DEBUG
+#"DEFAULTS"; $Defaults # DEBUG
 
 # Get PowerShell Info from custom function
 $Global:PSInfo = Get-PSInfo
@@ -125,7 +125,7 @@ if ($TermPaths) {
   $TerminalSettings = Get-Content "$ProfileDir\terminals.json" | ConvertFrom-Json
 
   $DefaultProfile = $TerminalSettings | Where-Object { $_.guid -eq $Defaults.default_terminal_guid }
-  "DEFAULT PROFILE"; $DefaultProfile # DEBUG
+  #"DEFAULT PROFILE"; $DefaultProfile # DEBUG
 
 
   ForEach ($TermPath in $TermPaths) {

@@ -334,7 +334,8 @@ $($remote_last.output)
 -----------------------------------
 "@
     Write-Host -ForegroundColor White "Run " -NoNewline
-    Write-Host -ForegroundColor Yellow "Install-ProfileUpdates" -NoNewline
+    Write-Host -ForegroundColor Yellow "Install-ProfileUpdates " -NoNewline
+    Write-Host -ForegroundColor White "to update your profile.`r"
   }else{
     Write-Host -ForegroundColor Green "No Updates $($update_string)  ✅"
   }
