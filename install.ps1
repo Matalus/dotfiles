@@ -58,26 +58,21 @@ $ScoopConfigPath = "$ProfileDir\scoop.yaml"
 $ScoopStatus = Get-ScoopPackages -ScoopConfigPath $ScoopConfigPath -PSInfo $Global:PSInfo
 
 # Get PowerShell Temp Profiles
-## The reason we don't use $PROFILE.CurrentUserAllHosts is because we don't know what verson of
-## Powershell you'll run the install script with and it invert the symlinks
 $TempProfile = Get-PSProfile
-$PS5TempProfile = $TempProfile.PS5Profile
-$PS7TempProfile = $TempProfile.PS7Profile
-
-# Set Environment Variables
-# TERMINAL_PROFILE_ROOT
-# Write-Host -ForegroundColor Yellow "Setting Environment Variables..."
-# [System.Environment]::SetEnvironmentVariable("TERMINAL_PROFILE_ROOT", $ProfileDir, "Machine")
-# [System.Environment]::SetEnvironmentVariable("TERMINAL_PROFILE_HOME", "$($Defaults.home_dir)", "Machine")
-# [System.Environment]::SetEnvironmentVariable("TERMINAL_DEFAULT_PROFILE_GUID", "$($Defaults.default_terminal_guid)", "Machine")
-
-# Oh-My-Posh Environment Variables
+# temp globals for Symlinks
+$env:PSWIN_PROFILE_DIR = $TempProfile.PS5Profile
+$env:PSCORE_PROFILE_DIR = $TempProfile.PS7Profile
+# Terminal Profile Static Variables
 $TERM_PROFILE_ENV_VARS = @{
-  "TERMINAL_PROFILE_ROOT"     = $ProfileDir
-  "TERMINAL_PROFILE_HOME"      = $Defaults.home_dir
+  "PSWIN_PROFILE_DIR" = $TempProfile.PS5Profile
+  "PSCORE_PROFILE_DIR" = $TempProfile.PS7Profile
+  "TERMINAL_PROFILE_ROOT"         = $ProfileDir
+  "TERMINAL_PROFILE_HOME"         = $Defaults.home_dir
   "TERMINAL_DEFAULT_PROFILE_GUID" = $Defaults.posh_prompt
 }
 Set-ProfileEnvironment -Variables $TERM_PROFILE_ENV_VARS
+
+RefreshEnv.cmd
 
 # Setup Symlinks
 $SymLinkConfigPath = "$ProfileDir\symlinks.yaml"
@@ -258,7 +253,5 @@ Catch {}
 
 # TODO Setup WSL Instances
 # make sure env variables are refreshed
-#RefreshEnv.cmd
-
 # Run PS7 Profile
 & $PROFILE.CurrentUserAllHosts

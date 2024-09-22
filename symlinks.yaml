@@ -6,7 +6,7 @@ symlinks:
   # PowerShell profiles
 - name: Windows Powershell Shim Profile
   source: .ps5shim
-  target: $PS5TempProfile
+  target: $env:PSWIN_PROFILE_DIR
 - name: PowerShell 7 Profile
   source: .psprofile
-  target: $PS7TempProfile
+  target: $env:PSCORE_PROFILE_DIR
