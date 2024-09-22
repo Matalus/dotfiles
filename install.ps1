@@ -54,11 +54,6 @@ if (!($PSInfo.is_admin))
   throw "Stopping: you must run 'install.ps1' as Administrator"
 }
 
-# Scoop Config Path
-$ScoopConfigPath = "$ProfileDir\scoop.yaml"
-
-# Get Scoop Package Status
-Get-ScoopPackages -ScoopConfigPath $ScoopConfigPath -PSInfo $Global:PSInfo
 
 # Get PowerShell Temp Profiles
 $TempProfile = Get-PSProfile
@@ -74,6 +69,12 @@ $TERM_PROFILE_ENV_VARS = @{
   "TERMINAL_DEFAULT_PROFILE_GUID" = $Defaults.posh_prompt
 }
 Set-ProfileEnvironment -Variables $TERM_PROFILE_ENV_VARS
+
+# Scoop Config Path
+$ScoopConfigPath = "$ProfileDir\scoop.yaml"
+
+# Get Scoop Package Status
+Get-ScoopPackages -ScoopConfigPath $ScoopConfigPath -PSInfo $Global:PSInfo
 
 # Setup Symlinks
 $SymLinkConfigPath = "$ProfileDir\symlinks.yaml"
