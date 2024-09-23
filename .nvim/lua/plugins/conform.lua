@@ -33,7 +33,6 @@ return {
         javascript = { "prettierd", "prettier", stop_after_first = true },
         powershell = {
           "powershell_es",
-          "prettier",
           -- command = "pwsh",
           -- args = {
           --   "-NoProfile",
@@ -57,7 +56,9 @@ return {
           args = {
             "-NoProfile",
             "-Command",
-            "{Invoke-Formatter -ScriptDefinition $($input | Out-String) -Settings @{ 'Style' = 'OTBS' } }",
+            -- "{Invoke-Formatter -ScriptDefinition $($input | Out-String) -Settings @{ 'Style' = 'OTBS' } }",
+            --
+            "{Invoke-Formatter -ScriptDefinition $($input | Out-String)}"
           },
           codeFormatting = {
             openBraceOnSameLine = true,

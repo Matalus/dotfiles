@@ -47,6 +47,20 @@ return {
       vim.cmd.colorscheme("evangelion")
     end,
   },
+  {
+    "sho-87/kanagawa-paper.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
+  },
+  {
+    'marko-cerovac/material.nvim'
+  },
   -- Set ColorScheme on Load
   {
     "LazyVim/LazyVim",
