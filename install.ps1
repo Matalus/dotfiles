@@ -276,3 +276,16 @@ if(!$TestHomeDir)
 # make sure env variables are refreshed
 # Run PS7 Profile
 & $PROFILE.CurrentUserAllHosts
+
+Write-Host -ForegroundColor Yellow @"
+
+====================================================================
+|************************ ATTENTION ! *****************************|
+|                                                                  |
+| It is Stroongly Recommended to Restart your Terminal Session     |
+|                                                                  |
+| Some Module and Assembly Conflicts may be resolved by Restarting |
+|                                                                  |
+|************************ ATTENTION ! *****************************|
+====================================================================
+"@
