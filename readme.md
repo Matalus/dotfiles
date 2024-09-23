@@ -120,7 +120,8 @@ Neovim looks for it's configuration by default on windows in this directory.
 
 ### **Notable customizations**
 
-- **COC.nvim (Conqueror of Completion)** configured to support `PowerShell` autocompletion
+<!-- - **COC.nvim (Conqueror of Completion)** configured to support `PowerShell` autocompletion -->
+- powershell_es configured using nvim-lspconfig and conform.nvim
 - **MarkdownLint** and **Markdown_Inline** configured in Mason to support live rendering in editor run `:RenderMarkdown`
 - **colorschemes.lua** additional colorschemes
 - **conform.nvim** setup for LSP and autoformatting `<leader>cf`

@@ -1,7 +1,7 @@
-return {
-  {
-    "neoclide/coc.nvim",
-    lazy = false,
-    branch = "release",
-  },
-}
+-- return {
+--   {
+--     "neoclide/coc.nvim",
+--     lazy = false,
+--     branch = "release",
+--   },
+-- }

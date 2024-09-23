@@ -16,6 +16,12 @@ return {
         desc = "Format buffer",
       },
     },
+    -- config = function()
+    --   require("lspconfig").powershell_es.setup({
+    --     bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
+    --     shell = "pswsh",
+    --   })
+    -- end,
     -- This will provide type hinting with LuaLS
     ---@module "conform"
     ---@type conform.setupOpts
@@ -25,7 +31,16 @@ return {
         lua = { "stylua" },
         python = { "isort", "black" },
         javascript = { "prettierd", "prettier", stop_after_first = true },
-        ps1 = { "powershell_es", "prettier" },
+        powershell = {
+          "powershell_es",
+          "prettier",
+          -- command = "pwsh",
+          -- args = {
+          --   "-NoProfile",
+          --   "-Command",
+          --   "{Invoke-Formatter -ScriptDefinition $($input | Out-String) -Settings @{ 'Style' = 'OTBS' } }",
+          -- }
+        },
       },
       -- Set default options
       default_format_opts = {
@@ -37,7 +52,20 @@ return {
         shfmt = {
           prepend_args = { "-i", "2" },
         },
-        prettierd = {
+        powershell_es = {
+          command = "pwsh",
+          args = {
+            "-NoProfile",
+            "-Command",
+            "{Invoke-Formatter -ScriptDefinition $($input | Out-String) -Settings @{ 'Style' = 'OTBS' } }",
+          },
+          codeFormatting = {
+            openBraceOnSameLine = true,
+          },
+          bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
+
+        },
+        prettier = {
           prepend_args = { "--bracket-same-line", },
         },
       },

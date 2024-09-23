@@ -2,23 +2,33 @@ return {
   {
     "TheLeoP/powershell.nvim",
     --@type powershell.user_config
-    opts = {
-      bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
-    },
+    config = function()
+      require("powershell").setup({
+        bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
+        settings = {
+          codeFormatting = {
+            openBraceOnSameLine = true,
+            whitespaceInsideBrace = true,
+          },
+          enableProfileLoading = false,
+
+        },
+      })
+    end,
     lazy = false,
     branch = "main",
-    settings = {
-      codeFormatting = {
-        openBraceOnSameLine = true,
-      },
-      powershell = {
-        scriptAnalysis = {
-          enable = true,
-          settingsPath =
-          "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PSScriptAnalyzer/1.22.0/PSScriptAnalyzer.psd1",
-        },
-      },
-    },
+    -- settings = {
+    --   codeFormatting = {
+    --     openBraceOnSameLine = true,
+    --   },
+    --   powershell = {
+    --     scriptAnalysis = {
+    --       enable = true,
+    --       settingsPath =
+    --       "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PSScriptAnalyzer/1.22.0/PSScriptAnalyzer.psd1",
+    --     },
+    --   },
+    -- },
   },
   {
     "JayDoubleu/vim-pwsh-formatter",
