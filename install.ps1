@@ -282,7 +282,7 @@ Write-Host -ForegroundColor Yellow @"
 ====================================================================
 |************************ ATTENTION ! *****************************|
 |                                                                  |
-| It is Stroongly Recommended to Restart your Terminal Session     |
+|   It is Strongly Recommended to Restart your Terminal Session    |
 |                                                                  |
 | Some Module and Assembly Conflicts may be resolved by Restarting |
 |                                                                  |
