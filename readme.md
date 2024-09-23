@@ -9,7 +9,12 @@
   <img src="https://img.youtube.com/vi/DykhkRQmmyw/maxresdefault.jpg" alt="One-Line Install" width="800"/>
 </a>
 
+> [!TIP]
 > Ok.. technically a 3-liner if you don't have `git` and `pwsh` installed
+> 
+> If you encounter errors during installation, try running the script again in a new terminal instance
+>
+> Some errors related to module and assembly version conflicts are often resolved by restarting the terminal
 
 1. Ensure that `pwsh` and `git` are installed
 
@@ -28,7 +33,7 @@ git clone https://github.com/Matalus/dotfiles.git terminal-profile; cd terminal-
 ```
  
 ## Install Script
->
+> [!IMPORTANT]
 > Script is idempotent, just run again to check for scoop updates etc (future update maybe incorporated into profile)
 
 ### Features
@@ -85,10 +90,12 @@ Will attempt to locate and patch the Windows Terminal `settings.json` to include
 - [Terminal-Icons](https://github.com/devblackops/Terminal-Icons)
 - Automatic Update Checks
 
+  > [!WARNING]
   > *updates available*
 
   <img src="img/profile_needs_update.jpg" height="200">
 
+  > [!NOTE]
   > *up to date*
 
   <img src="img/profile_up_to_date.jpg" height="60">
@@ -141,8 +148,10 @@ Neovim looks for it's configuration by default on windows in this directory.
 
 ![powershell](https://raw.githubusercontent.com/PowerShell/PowerShell/master/assets/ps_black_128.svg?sanitize=true)
 
+>[!IMPORTANT]
 > Check winget for latest version of PowerShell (WIP)
-> NOTE: `install.ps1` will also attempt to automate this, might replace the default builtin function
+> 
+> `install.ps1` will also attempt to automate this, might replace the default builtin function
 
 Method for getting latest version of powershell from winget
 
@@ -199,6 +208,7 @@ git config --global -e
 
  ![scoop.sh](https://avatars.githubusercontent.com/u/16618068?s=30)
 
+> [!NOTE]
 > This Project relies on **Scoop** to manage and streamline software and package dependencies
 
 The 1st time you run `.\install.ps1` the script will check if scoop is installed, and attempt to install if not present.
@@ -214,7 +224,7 @@ if you'd like to install manually or browse for additional apps / packages visit
 - main
 
 ### scoop packages
-
+> [!IMPORTANT]
 > Add additional packages to `scoop.yaml` to make them required
 
 - neovim
