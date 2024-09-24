@@ -5,3 +5,4 @@
 .nvim/PowerShellEditorServices.json
 .psprofile/Cred.csv
 .omp
+local.defaults.yaml
