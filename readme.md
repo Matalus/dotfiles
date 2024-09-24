@@ -47,6 +47,12 @@ posh_prompt: half-life # Run Get-PoshThemes to see all possible themes
 default_terminal: pwsh # Name of default Windows Terminal Profile
 home_dir: c:\src
 ```
+- **Local Defaults**
+
+> [!TIP]
+> You can override the global defaults by altering the settings in `local.defaults.yaml` this allows you to receive update from upstream but still customize your profile to your liking.
+> - This file will be automatically created the 1st time the profile runs
+> - Run `Install.ps1` again after customizing your settings to update environment variables
 
 - Symbolic links to keep all config in repo root (created by `install.ps1`)
 

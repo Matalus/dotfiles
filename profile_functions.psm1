@@ -390,12 +390,15 @@ function Get-PoshStackCount { (Get-Location -Stack).Count }
 # init oh my posh
 function Initialize-OhMyPosh {
   $PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue | Where-Object {
-    $_.Name -match $env:OMP_DEFAULT_PROMPT
+    $_.Name -match "$($env:OMP_DEFAULT_PROMPT)\." | Select-Object -First 1
   }
   Try {
+    Write-Host -ForegroundColor Cyan "Applying PoshTheme: $($PoshTheme.Name.Replace('.omp.json',''))" -NoNewline
     $null = oh-my-posh init pwsh --config $PoshTheme.FullName | Invoke-Expression -ErrorAction SilentlyContinue
+    Write-Host " ✅"
   }
   Catch {
+    Write-Host -ForegroundColor Yellow "No PoshTheme found matching: [ $($env:OMP_DEFAULT_PROMPT) ]"
     $null = oh-my-posh init pwsh | Invoke-Expression
   }
 }

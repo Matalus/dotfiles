@@ -17,7 +17,7 @@ apps:
   - main/gzip # Required for Neovim
   - main/unzip # Required for Neovim
   - main/micro # Micro (fork of nano)
-  # - main/mingw # Required for Neovim (compiler)
+  - main/mingw # Required for Neovim (compiler)
   - main/zig # Different C Compiler
   - main/ripgrep # Required for Neovim
   - main/tree-sitter # Required for Neovim
