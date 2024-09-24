@@ -37,7 +37,7 @@ else {
 }
 
 $ProjectRoot = Split-Path -Parent $ResolvedDir
-Write-Host "ProjectRoot: $ProjectRoot"
+Write-Verbose "ProjectRoot: $ProjectRoot"
 $Defaults = Get-Content "$ProjectRoot\defaults.yaml" | ConvertFrom-Yaml
 #Sets Theme
 
@@ -63,16 +63,18 @@ else {
   # Get Keys
   $LocalKeys = Try {
     $LocalDefaults.psobject.properties | Where-Object { $_.Name -eq "Keys" } | Select-Object -ExpandProperty Value
-  }Catch{}
+  }
+  Catch {
+  }
 
   # Loop through and compare Keys
   ForEach ($LocalKey in $LocalKeys) {
-    if($Defaults[$LocalKey] -ne $LocalDefaults[$LocalKey]){
+    if ($Defaults[$LocalKey] -ne $LocalDefaults[$LocalKey]) {
       $Defaults[$LocalKey] = $LocalDefaults[$LocalKey]
     }
   }
-  Write-Host "Local Defaults Loaded"
-  $LocalDefaults
+  Write-Verbose "Local Defaults Loaded"
+  Write-Verbose $Defaults
 }
 
 # Set HomeDir
@@ -235,24 +237,6 @@ else {
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
 #endregion
 
-#region VSCode
-# Load Editor Services if VSCode
-if ($Host.Name -match "Visual Studio Code" -and $PSCore) {
-  Try {
-    if (!(Get-Module -Name EditorServicesCommandSuite -ListAvailable)) {
-      Install-Module EditorServicesCommandSuite -AllowPrerelease -Scope CurrentUser
-    }
-      
-    Import-Module EditorServicesCommandSuite
-    Import-EditorCommand (Get-Command -Module EditorServicesCommandSuite)
-    Write-Host -ForegroundColor Yellow "Press: 'Shift + Alt + S' to show editor services commands"
-
-  }
-  Catch {
-    Write-Warning "Failed to Import Editor Services Commands"
-  }
-}
-#endregion
 
 
 #region PSRun

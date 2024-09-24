@@ -389,6 +389,13 @@ function Get-PoshStackCount { (Get-Location -Stack).Count }
 
 # init oh my posh
 function Initialize-OhMyPosh {
+  if(!$env:OMP_DEFAULT_PROMPT){
+    $env:OMP_DEFAULT_PROMPT = [System.Environment]::GetEnvironmentVariable("OMP_DEFAULT_PROMPT","Machine")
+  }
+  if(!$env:OMP_THEMES_DIR){
+    $env:OMP_THEMES_DIR = [System.Environment]::GetEnvironmentVariable("OMP_THEMES_DIR","Machine")
+  }
+  
   $PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue | Where-Object {
     $_.Name -match "$($env:OMP_DEFAULT_PROMPT)\." | Select-Object -First 1
   }
