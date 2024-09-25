@@ -44,33 +44,7 @@ $Defaults = Get-Content $ProfileDir\defaults.yaml | ConvertFrom-Yaml
 Write-Host "Global Defaults Loaded"
 $Defaults
 
-# TODO see if you can turn this into a function
-# Setup Local Override defaults
-$LocalDefaultsPath = "$($ProfileDir)\local.defaults.yaml"
-$TestLocalDefaults = test-path $LocalDefaultsPath
-
-if (!$TestLocalDefaults) {
-  # Create Local Defaults 
-  $Defaults | ConvertTo-Yaml | Set-Content $LocalDefaultsPath -Force -Verbose
-}
-else {
-  # Load Local Defaults
-  $LocalDefaults = (Get-Content $LocalDefaultsPath) | ConvertFrom-Yaml
-  
-  # Get Keys
-  $LocalKeys = Try {
-    $LocalDefaults.psobject.properties | Where-Object { $_.Name -eq "Keys" } | Select-Object -ExpandProperty Value
-  }Catch{}
-
-  # Loop through and compare Keys
-  ForEach ($LocalKey in $LocalKeys) {
-    if($Defaults[$LocalKey] -ne $LocalDefaults[$LocalKey]){
-      $Defaults[$LocalKey] = $LocalDefaults[$LocalKey]
-    }
-  }
-  Write-Host "Local Defaults Loaded"
-  $LocalDefaults
-}
+$Defaults = Update-LocalDefaults -LocalDefaultsPath "$($ProfileDir)\local.defaults.yaml" -GlobalDefaults $Defaults
 
 # Get PowerShell Info from custom function
 $Global:PSInfo = Get-PSInfo

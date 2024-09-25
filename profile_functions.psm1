@@ -49,7 +49,10 @@ function Install-Scoop ($PSInfo) {
 function Get-ScoopPackages ($ScoopConfigPath, $PSInfo) {
   # Confirm that Scoop is installed
   Write-Host "Scoop Installed:" -NoNewline
-  $TestScoop = Try { Get-Command -Name "scoop.cmd" -ErrorAction SilentlyContinue }Catch {
+  $TestScoop = Try {
+    Get-Command -Name "scoop.cmd" -ErrorAction SilentlyContinue 
+  }
+  Catch {
     $false
   }
 
@@ -125,9 +128,7 @@ if (-not ("Windows.Native.Kernel32" -as [type])) {
       {
         // Constants
         ////////////////////////////////////////////////////////////////////////////
-        public const uint FILE_SHARE_READ = 1;
-        public const uint FILE_SHARE_WRITE = 2;
-        public const uint GENERIC_READ = 0x80000000;
+        public const uint FILE_SHARE_READ = 1; public const uint FILE_SHARE_WRITE = 2; public const uint GENERIC_READ = 0x80000000;
         public const uint GENERIC_WRITE = 0x40000000;
         public static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
         public const int STD_ERROR_HANDLE = -12;
@@ -385,15 +386,17 @@ function Set-ProfileEnvironment ([hashtable]$Variables) {
   }
 }
 # required workaround for occasionally missing function during profile reloads
-function Get-PoshStackCount { (Get-Location -Stack).Count }
+function Get-PoshStackCount {
+ (Get-Location -Stack).Count 
+}
 
 # init oh my posh
 function Initialize-OhMyPosh {
-  if(!$env:OMP_DEFAULT_PROMPT){
-    $env:OMP_DEFAULT_PROMPT = [System.Environment]::GetEnvironmentVariable("OMP_DEFAULT_PROMPT","Machine")
+  if (!$env:OMP_DEFAULT_PROMPT) {
+    $env:OMP_DEFAULT_PROMPT = [System.Environment]::GetEnvironmentVariable("OMP_DEFAULT_PROMPT", "Machine")
   }
-  if(!$env:OMP_THEMES_DIR){
-    $env:OMP_THEMES_DIR = [System.Environment]::GetEnvironmentVariable("OMP_THEMES_DIR","Machine")
+  if (!$env:OMP_THEMES_DIR) {
+    $env:OMP_THEMES_DIR = [System.Environment]::GetEnvironmentVariable("OMP_THEMES_DIR", "Machine")
   }
   
   $PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue | Where-Object {
@@ -423,7 +426,12 @@ function Update-PowerShellCore {
     $UpdateCheck.Current.Major -eq $UpdateCheck.Latest.Major -and
     $UpdateCheck.Current.Minor -eq $UpdateCheck.Latest.Minor -and
     $UpdateCheck.Current.Build -eq $UpdateCheck.Latest.Build
-  ) { $true }else { $false }
+  ) {
+    $true 
+  }
+  else {
+    $false 
+  }
   if ($NoUpdate) {
     Write-Host "PowerShell is up to date $VersionSummary"
   }
@@ -440,5 +448,35 @@ function Update-PowerShellCore {
   }
 }
 
+function Update-LocalDefaults ($LocalDefaultsPath, $GlobalDefaults) {
+  # TODO see if you can turn this into a function
+  # Setup Local Override defaults
+  $TestLocalDefaults = test-path $LocalDefaultsPath
+
+  if (!$TestLocalDefaults) {
+    # Create Local Defaults 
+    $GlobalDefaults | ConvertTo-Yaml | Set-Content $LocalDefaultsPath -Force -Verbose
+    return $GlobalDefaults
+  }
+  else {
+    # Load Local Defaults
+    $LocalDefaults = (Get-Content $LocalDefaultsPath) | ConvertFrom-Yaml
+  
+    # Get Keys
+    $LocalKeys = Try {
+      $LocalDefaults.psobject.properties | Where-Object { $_.Name -eq "Keys" } | Select-Object -ExpandProperty Value
+    }
+    Catch {
+    }
+
+    # Loop through and compare Keys
+    ForEach ($LocalKey in $LocalKeys) {
+      if ($GlobalDefaults[$LocalKey] -ne $LocalDefaults[$LocalKey]) {
+        $GlobalDefaults[$LocalKey] = $LocalDefaults[$LocalKey]
+      }
+    }
+    return $GlobalDefaults
+  }
+}
 
 Export-ModuleMember *-*

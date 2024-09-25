@@ -48,34 +48,13 @@ else {
   $false
 }
 
-# Setup Local Override defaults
+#region LoadProfileFunctions
+Import-Module "$ProjectRoot\profile_functions.psm1" -Force -ErrorAction SilentlyContinue
+#endregion
+
 $LocalDefaultsPath = "$ProjectRoot\local.defaults.yaml"
-$TestLocalDefaults = test-path $LocalDefaultsPath
-
-if (!$TestLocalDefaults) {
-  # Create Local Defaults 
-  $Defaults | ConvertTo-Yaml | Set-Content $LocalDefaultsPath -Force -Verbose
-}
-else {
-  # Load Local Defaults
-  $LocalDefaults = (Get-Content $LocalDefaultsPath) | ConvertFrom-Yaml
-  
-  # Get Keys
-  $LocalKeys = Try {
-    $LocalDefaults.psobject.properties | Where-Object { $_.Name -eq "Keys" } | Select-Object -ExpandProperty Value
-  }
-  Catch {
-  }
-
-  # Loop through and compare Keys
-  ForEach ($LocalKey in $LocalKeys) {
-    if ($Defaults[$LocalKey] -ne $LocalDefaults[$LocalKey]) {
-      $Defaults[$LocalKey] = $LocalDefaults[$LocalKey]
-    }
-  }
-  Write-Verbose "Local Defaults Loaded"
-  Write-Verbose $Defaults
-}
+# Update Local Override variable if present
+$Defaults = Update-LocalDefaults -LocalDefaultsPath $LocalDefaultsPath -GlobalDefaults $Defaults
 
 # Set HomeDir
 $HomeDir = $Defaults.home_dir
@@ -124,10 +103,6 @@ ForEach ($function in $custom_function_list) {
     Write-Host -ForegroundColor Red " Fail ❌"
   }
 }
-#endregion
-
-#region LoadProfileFunctions
-Import-Module "$ProjectRoot\profile_functions.psm1" -Force -ErrorAction SilentlyContinue
 #endregion
 
 #region ImportModules
