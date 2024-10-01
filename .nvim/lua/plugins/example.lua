@@ -42,39 +42,6 @@ return {
       table.insert(opts.sources, { name = "emoji" })
     end,
   },
-
-  -- change some telescope options and a keymap to browse plugin files
-  -- {
-  --   "nvim-telescope/telescope.nvim",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim"
-  --   },
-  --   keys = {
-  --     -- add a keymap to browse plugin files
-  --     -- stylua: ignore
-  --     {
-  --       "<leader>fp",
-  --       function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
-  --       desc = "Find Plugin File",
-  --     },
-  --     {
-  --       "<leader>gS",
-  --       function() require("telescope.builtin").git_branches() end,
-  --       desc = "Find Git Branches",
-  --     }
-  --   },
-  --   -- change some options
-  --   opts = {
-  --     defaults = {
-  --       layout_strategy = "horizontal",
-  --       layout_config = { prompt_position = "top" },
-  --       sorting_strategy = "ascending",
-  --       winblend = 0,
-  --     },
-  --   },
-  -- },
-
-
   -- for typescript, LazyVim also includes extra specs to properly setup lspconfig,
   -- treesitter, mason and typescript.nvim. So instead of the above, you can use:
   { import = "lazyvim.plugins.extras.lang.typescript" },
@@ -101,25 +68,6 @@ return {
       },
     },
   },
-
-  -- since `vim.tbl_deep_extend`, can only merge tables and not lists, the code above
-  -- would overwrite `ensure_installed` with the new value.
-  -- If you'd rather extend the default config, use the code below instead:
-  -- {
-  --   "nvim-treesitter/nvim-treesitter",
-  --   opts = function(_, opts)
-  --     -- add tsx and treesitter
-  --     vim.list_extend(opts.ensure_installed, {
-  --       "tsx",
-  --       "typescript",
-  --       "powershell",
-  --       "markdown",
-  --       "markdown_inline",
-  --
-  --     })
-  --   end,
-  -- },
-
   -- the opts function can also be used to change the default opts:
   {
     "nvim-lualine/lualine.nvim",
@@ -128,7 +76,6 @@ return {
       table.insert(opts.sections.lualine_x, "😄")
     end,
   },
-
   -- or you can return new options to override all the defaults
   {
     "nvim-lualine/lualine.nvim",
@@ -139,7 +86,6 @@ return {
       }
     end,
   },
-
   -- use mini.starter instead of alpha
   { import = "lazyvim.plugins.extras.ui.mini-starter" },
 

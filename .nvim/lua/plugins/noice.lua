@@ -25,7 +25,7 @@ return {
       },
       -- Customizing notification timeout
       notify = {
-        timeout = 10000, -- Set the timeout to 5000 milliseconds (5 seconds)
+        timeout = 20000, -- Set the timeout to 5000 milliseconds (5 seconds)
       },
       messages = {
         timeout = 20000,

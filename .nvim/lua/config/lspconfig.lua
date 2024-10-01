@@ -7,18 +7,18 @@ return {
       ---@type lspconfig.options
       servers = {
         -- pyright will be automatically installed with mason and loaded with lspconfig
-        pyright = {}
-      }
-    }
+        pyright = {},
+      },
+    },
   },
   -- add markdown linting
   {
     "neovim/nvim-lspconfig",
     config = function()
       local lspconfig = require("lspconfig")
-      lspconfig.efm.setup {
+      lspconfig.efm.setup({
         init_options = {
-          documentFormatting = true
+          documentFormatting = true,
         },
         filetypes = { "markdown" },
         settings = {
@@ -27,12 +27,12 @@ return {
             markdown = {
               lintCommand = "markdownlint -s",
               lintStdin = true,
-              lintFormats = { "%f:%1 %m" }
-            }
-          }
-        }
-      }
-    end
+              lintFormats = { "%f:%1 %m" },
+            },
+          },
+        },
+      })
+    end,
   },
   -- add tsserver and setup with typescript.nvim instead of lspconfig
   {
@@ -48,17 +48,17 @@ return {
           })
           vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", {
             desc = "Rename File",
-            buffer = buffer
+            buffer = buffer,
           })
         end)
-      end
+      end,
     },
     ---@class PluginLspOpts
     opts = {
       ---@type lspconfig.options
       servers = {
         -- tsserver will be automatically installed with mason and loaded with lspconfig
-        tsserver = {}
+        tsserver = {},
       },
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
@@ -67,56 +67,33 @@ return {
         -- example to setup with typescript.nvim
         tsserver = function(_, opts)
           require("typescript").setup({
-            server = opts
+            server = opts,
           })
           return true
-        end
+        end,
         -- Specify * to use this function as a fallback for any server
         -- ["*"] = function(server, opts) end,
-      }
-    }
+      },
+    },
   },
   -- add powershell config
   {
     "neovim/nvim-lspconfig",
     config = function()
       local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({})
-      lspconfig.powershell_es.setup({
-        filetypes = { "ps1", "psm1", "psd1" },
-        bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
-        -- cmd = { 'pwsh', '-NoLogo', '-NoProfile', '-Command', "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/Start-EditorServices.ps1", },
-        settings = {
-          powershell = {
-            codeFormatting = {
-              Preset = 'OTBS',
-              openBraceOnSameLine = true,
-            },
-            scriptAnalysis = {
-              enable = true,
-              settingsPath =
-              "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PSScriptAnalyzer/1.22.0/PSScriptAnalyzer.psd1",
-            }
-          }
-        },
-        init_options = {
-          enableProfileLoading = false,
-        },
-      })
-
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
-      vim.keymap.set({ 'n' }, '<leader>ca', vim.lsp.buf.code_action, {})
-    end
+      vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+      vim.keymap.set({ "n" }, "<leader>ca", vim.lsp.buf.code_action, {})
+    end,
   },
   {
     "j-hui/fidget.nvim",
     opts = {
       -- options
-    }
+    },
   },
 
-  'neovim/nvim-lspconfig',
+  "neovim/nvim-lspconfig",
   dependencies = {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
@@ -127,19 +104,7 @@ return {
     "hrsh7th/nvim-cmp",
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
-    "j-hui/fidget.nvim"
+    "j-hui/fidget.nvim",
     -- "rafamadriz/friendly-snippets",
   },
-  config = function()
-    local lspconfig = require("lspconfig")
-    lspconfig.lua_ls.setup({})
-    lspconfig.powershell_es.setup({
-      filetypes = { "ps1", "psm1", "psd1" },
-      bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services",
-      settings = { powershell = { "codeFormattingOTBS" } },
-      init_options = {
-        enableProfileLoading = false,
-      }
-    })
-  end
 }
