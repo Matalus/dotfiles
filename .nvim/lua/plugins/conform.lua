@@ -2,13 +2,16 @@ return {
   -- These are some examples, uncomment them if you want to see them work!
   {
     "stevearc/conform.nvim",
+    dependencies = {
+      "mason.nvim"
+    },
     lazy = false,
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },
     keys = {
       {
         -- Customize or remove this keymap to your liking
-        "<leader>f",
+        "<leader>lf",
         function()
           require("conform").format({ async = true })
         end,
@@ -16,13 +19,6 @@ return {
         desc = "Format buffer",
       },
     },
-    -- config = function()
-    --   require("lspconfig").powershell_es.setup({
-    --     bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
-    --     shell = "pswsh",
-    --   })
-    -- end,
-    -- This will provide type hinting with LuaLS
     ---@module "conform"
     ---@type conform.setupOpts
     opts = {
@@ -31,15 +27,11 @@ return {
         lua = { "stylua" },
         python = { "isort", "black" },
         javascript = { "prettierd", "prettier", stop_after_first = true },
-        powershell = {
-          "powershell_es",
-          -- command = "pwsh",
-          -- args = {
-          --   "-NoProfile",
-          --   "-Command",
-          --   "{Invoke-Formatter -ScriptDefinition $($input | Out-String) -Settings @{ 'Style' = 'OTBS' } }",
-          -- }
-        },
+        bash = { "shfmt" },
+        powershell = { "powershell_es" },
+        ps1 = { "powershell_es" },
+        psm1 = { "powershell_es" },
+        psd1 = { "powershell_es" },
       },
       -- Set default options
       default_format_opts = {
@@ -56,18 +48,17 @@ return {
           args = {
             "-NoProfile",
             "-Command",
-            -- "{Invoke-Formatter -ScriptDefinition $($input | Out-String) -Settings @{ 'Style' = 'OTBS' } }",
-            --
-            "{Invoke-Formatter -ScriptDefinition $($input | Out-String)}"
+            "[Console]::In.ReadToEnd() | Invoke-Formatter -Settings CodeFormattingOTBS",
           },
           codeFormatting = {
             openBraceOnSameLine = true,
           },
           bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
+          stdin = true,
 
         },
         prettier = {
-          prepend_args = { "--bracket-same-line", },
+          prepend_args = { "--bracket-same-line" },
         },
       },
     },

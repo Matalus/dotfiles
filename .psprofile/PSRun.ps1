@@ -1,13 +1,15 @@
 Write-Host -ForegroundColor Cyan "Setting: PSRun Options: " -NoNewline
 # Enable PSRun
-Try {
+Try
+{
   Enable-PSRunEntry -Category All -ErrorAction SilentlyContinue
-}
-Catch {
+} Catch
+{
 }
 
 # Add Launch binding
-Try {
+Try
+{
   Set-PSRunPSReadLineKeyHandler -InvokePsRunChord 'Ctrl+j'
 
   # History Search binding
@@ -15,8 +17,8 @@ Try {
 
   # Set Code as default editor
   Set-PSRunDefaultEditorScript -ScriptBlock { param ($path) & code $path }
-}
-Catch {
+} Catch
+{
 }
 
 # Set favorite directories
@@ -31,3 +33,4 @@ $FavoriteDirs | ForEach-Object {
   Add-PSRunFavoriteFolder -Path $_
 }
 Write-Host -ForegroundColor Green "done"
+

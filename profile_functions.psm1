@@ -1,15 +1,17 @@
 # Collection of profile functions
 
 # Function to check is PowerShell is running as Admin
-function Get-PSInfo {
+function Get-PSInfo
+{
   $PSAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent(
     )).IsInRole(
     [Security.Principal.WindowsBuiltInRole]::Administrator
   )
-  $PSCore = if ($PSVersionTable.PSVersion -gt [version]"7.0.0") {
+  $PSCore = if ($PSVersionTable.PSVersion -gt [version]"7.0.0")
+  {
     $true
-  }
-  else {
+  } else
+  {
     $false
   }
   $PSHost = $Host.Name
@@ -23,21 +25,24 @@ function Get-PSInfo {
 }
 
 # Install Scoop
-function Install-Scoop ($PSInfo) {
+function Install-Scoop ($PSInfo)
+{
   Write-Host "Installing Scoop " -NoNewline
-  if ($PSInfo.is_admin) {
+  if ($PSInfo.is_admin)
+  {
     Write-Host "As Admin..."
     # Run scoop admin install
-    Try {
-      iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
-    }
-    Catch {
+    Try
+    {
+      Invoke-Expression "& {$(Invoke-RestMethod -Uri get.scoop.sh)} -RunAsAdmin"
+    } Catch
+    {
       # Install scoop in regular mode
       Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
       Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression 
     }
-  }
-  else {
+  } else
+  {
     Write-Host "As CurrentUser..."
     # Install scoop in regular mode
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -46,23 +51,26 @@ function Install-Scoop ($PSInfo) {
 }
 
 # Return status of scoop packages
-function Get-ScoopPackages ($ScoopConfigPath, $PSInfo) {
+function Get-ScoopPackages ($ScoopConfigPath, $PSInfo)
+{
   # Confirm that Scoop is installed
   Write-Host "Scoop Installed:" -NoNewline
-  $TestScoop = Try {
+  $TestScoop = Try
+  {
     Get-Command -Name "scoop.cmd" -ErrorAction SilentlyContinue 
-  }
-  Catch {
+  } Catch
+  {
     $false
   }
 
   # Attempt to Install Scoop if not installed
-  if (!($TestScoop)) {
+  if (!($TestScoop))
+  {
     Write-Host -ForegroundColor Red " Not Installed"
     Write-Host -ForegroundColor Cyan "Attempting to Install Scoop..."
     Install-Scoop -PSInfo $PSInfo
-  }
-  else {
+  } else
+  {
     Write-Host -ForegroundColor Green " OK ✅"
   }
 
@@ -85,13 +93,15 @@ function Get-ScoopPackages ($ScoopConfigPath, $PSInfo) {
 
   $padvalue = ($ScoopAppsRequired | ForEach-Object { $_.Length } | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum) + 3
   # check for installed buckets and add missing
-  ForEach ($Bucket in $ScoopBucketsRequired) {
+  ForEach ($Bucket in $ScoopBucketsRequired)
+  {
     Write-Host -ForegroundColor White "-> $($Bucket):".PadRight(100).Substring(0, $padvalue) -NoNewline
-    if ($Bucket -notin $ScoopBuckets.Name) {
+    if ($Bucket -notin $ScoopBuckets.Name)
+    {
       Write-Host -ForegroundColor Yellow " missing ⚠️"
       Invoke-Expression "scoop bucket add $($Bucket)"
-    }
-    else {
+    } else
+    {
       Write-Host -ForegroundColor Green " OK ✅"
     }
   }
@@ -103,19 +113,22 @@ function Get-ScoopPackages ($ScoopConfigPath, $PSInfo) {
   }
 
   # check for Installed apps and add missing
-  ForEach ($App in $ScoopAppsRequired) {
-    Write-Host "-> $($App):".PadRight(100).Substring(0, $padvalue) -NoNewLine
-    if ($App -notin $ScoopApps) {
+  ForEach ($App in $ScoopAppsRequired)
+  {
+    Write-Host "-> $($App):".PadRight(100).Substring(0, $padvalue) -NoNewline
+    if ($App -notin $ScoopApps)
+    {
       Write-Host -ForegroundColor Yellow "missing "
       Invoke-Expression "scoop install $($App)"
-    }
-    else {
+    } else
+    {
       Write-Host -ForegroundColor Green " OK ✅"
     }
   }
 }
 
-if (-not ("Windows.Native.Kernel32" -as [type])) {
+if (-not ("Windows.Native.Kernel32" -as [type]))
+{
   Add-Type -TypeDefinition @"
     namespace Windows.Native
     {
@@ -265,7 +278,8 @@ if (-not ("Windows.Native.Kernel32" -as [type])) {
 }
 
 
-function Set-ConsoleFont {
+function Set-ConsoleFont
+{
   [CmdletBinding()]
   param
   (
@@ -287,14 +301,16 @@ function Set-ConsoleFont {
 }
 
 # Get PS Profile Paths
-function Get-PSProfile {
+function Get-PSProfile
+{
   return [pscustomobject]@{
-    PS7Profile = & "pwsh.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { split-path -Parent $_ } ;
-    PS5Profile = & "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { split-path -Parent $_ } ;
+    PS7Profile = & "pwsh.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { Split-Path -Parent $_ } ;
+    PS5Profile = & "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -Command '$PROFILE.CurrentUserAllHosts' | ForEach-Object { Split-Path -Parent $_ } ;
   }
 }
 
-function Invoke-NativeCommand ($Cmd, $ProcArgs, $WorkDir) {
+function Invoke-NativeCommand ($Cmd, $ProcArgs, $WorkDir)
+{
   # Create Process Info Object
   $proc_info = [System.Diagnostics.ProcessStartInfo]::new()
   $proc_info.FileName = $Cmd
@@ -304,7 +320,8 @@ function Invoke-NativeCommand ($Cmd, $ProcArgs, $WorkDir) {
   $proc_info.RedirectStandardOutput = $true
   $proc_info.UseShellExecute = $false
   # Run Process
-  Try {
+  Try
+  {
     $proc = [System.Diagnostics.Process]::new()
     $proc.StartInfo = $proc_info
     $proc.Start() | Out-Null
@@ -313,8 +330,8 @@ function Invoke-NativeCommand ($Cmd, $ProcArgs, $WorkDir) {
     $proc_err = $proc.StandardError.ReadToEnd()
     [timespan]$RunTime = $proc.ExitTime - $proc.StartTime
     $proc.Dispose()
-  }
-  Catch {
+  } Catch
+  {
     $proc.Dispose()
   }
   return [pscustomobject]@{
@@ -324,7 +341,8 @@ function Invoke-NativeCommand ($Cmd, $ProcArgs, $WorkDir) {
   }
 }
 
-function Get-ProfileUpdates ($Dir) {
+function Get-ProfileUpdates ($Dir)
+{
   $remoteurl = Invoke-NativeCommand -Cmd "git.exe" -ProcArgs "remote -v" -WorkDir $Dir
   $remote_fetch = $remoteurl.output -split "`n" | Select-Object -First 1
   Write-Host -ForegroundColor White "Checking for Updates on: " -NoNewline
@@ -337,7 +355,8 @@ function Get-ProfileUpdates ($Dir) {
 
   $update_string = "[local: $($local.output.Substring(0,7)) remote: $($remote.output.Substring(0,7))]"
 
-  if ($local.output -ne $remote.output) {
+  if ($local.output -ne $remote.output)
+  {
     Write-Host -ForegroundColor Yellow "Pending Updates $($update_string) ⚠️"
     Write-Host @"
 -----------------------------------
@@ -347,13 +366,14 @@ $($remote_last.output)
     Write-Host -ForegroundColor White "Run " -NoNewline
     Write-Host -ForegroundColor Yellow "Install-ProfileUpdates " -NoNewline
     Write-Host -ForegroundColor White "to update your profile.`r"
-  }
-  else {
+  } else
+  {
     Write-Host -ForegroundColor Green "No Updates $($update_string)  ✅"
   }
 }
 
-function Install-ProfileUpdates {
+function Install-ProfileUpdates
+{
   Set-Location $env:TERMINAL_PROFILE_ROOT
   Write-Host -ForegroundColor Cyan "Installing Updates"
   Write-Host -ForegroundColor Cyan "Pulling Source Code..."
@@ -367,7 +387,8 @@ function Install-ProfileUpdates {
 }
 
 # TODO set env variables
-function Set-ProfileEnvironment ([hashtable]$Variables) {
+function Set-ProfileEnvironment ([hashtable]$Variables)
+{
   $NameLen = $Variables.GetEnumerator() | ForEach-Object {
     $($_.Name.Length) 
   } | Sort-Object -Descending | Select-Object -First 1
@@ -376,7 +397,8 @@ function Set-ProfileEnvironment ([hashtable]$Variables) {
   } | Sort-Object -Descending | Select-Object -First 1
 
   
-  ForEach ($Variable in $Variables.GetEnumerator()) {
+  ForEach ($Variable in $Variables.GetEnumerator())
+  {
     Write-Host -ForegroundColor White "Setting Environment Variable: " -NoNewline
     Write-Host -ForegroundColor Magenta "$($Variable.Name)".PadRight(100).Substring(0, ($NameLen + 2)) -NoNewline
     Write-Host "= $($Variable.Value): ".PadRight(200).Substring(0, ($ValLen + 2)) -NoNewline
@@ -386,37 +408,43 @@ function Set-ProfileEnvironment ([hashtable]$Variables) {
   }
 }
 # required workaround for occasionally missing function during profile reloads
-function Get-PoshStackCount {
+function Get-PoshStackCount
+{
  (Get-Location -Stack).Count 
 }
 
 # init oh my posh
-function Initialize-OhMyPosh {
-  if (!$env:OMP_DEFAULT_PROMPT) {
+function Initialize-OhMyPosh
+{
+  if (!$env:OMP_DEFAULT_PROMPT)
+  {
     $env:OMP_DEFAULT_PROMPT = [System.Environment]::GetEnvironmentVariable("OMP_DEFAULT_PROMPT", "Machine")
   }
-  if (!$env:OMP_THEMES_DIR) {
+  if (!$env:OMP_THEMES_DIR)
+  {
     $env:OMP_THEMES_DIR = [System.Environment]::GetEnvironmentVariable("OMP_THEMES_DIR", "Machine")
   }
   
   $PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue | Where-Object {
     $_.Name -match "$($env:OMP_DEFAULT_PROMPT)\." | Select-Object -First 1
   }
-  Try {
+  Try
+  {
     Write-Host -ForegroundColor Cyan "Applying PoshTheme: $($PoshTheme.Name.Replace('.omp.json',''))" -NoNewline
     $null = oh-my-posh init pwsh --config $PoshTheme.FullName | Invoke-Expression -ErrorAction SilentlyContinue
     Write-Host " ✅"
-  }
-  Catch {
+  } Catch
+  {
     Write-Host -ForegroundColor Yellow "No PoshTheme found matching: [ $($env:OMP_DEFAULT_PROMPT) ]"
     $null = oh-my-posh init pwsh | Invoke-Expression
   }
 }
 
-function Update-PowerShellCore {
+function Update-PowerShellCore
+{
   $UpdateCheck = [pscustomobject]@{
     Current = [version]$PSVersionTable.PSVersion | Select-Object Major, Minor, Build;
-    Latest  = [version](Invoke-RestMethod -Uri "https://aka.ms/pwsh-buildinfo-stable" | Select-Object -ExpandProperty  ReleaseTag | % { $_ -replace "v" }) | Select-Object Major, Minor, Build
+    Latest  = [version](Invoke-RestMethod -Uri "https://aka.ms/pwsh-buildinfo-stable" | Select-Object -ExpandProperty  ReleaseTag | ForEach-Object { $_ -replace "v" }) | Select-Object Major, Minor, Build
   }
   $CurrentSemantic = ($UpdateCheck.Current.psobject.properties | ForEach-Object { $_.Value }) -join "."
   $LatestSemantic = ($UpdateCheck.Latest.psobject.properties | ForEach-Object { $_.Value }) -join "."
@@ -426,21 +454,24 @@ function Update-PowerShellCore {
     $UpdateCheck.Current.Major -eq $UpdateCheck.Latest.Major -and
     $UpdateCheck.Current.Minor -eq $UpdateCheck.Latest.Minor -and
     $UpdateCheck.Current.Build -eq $UpdateCheck.Latest.Build
-  ) {
-    $true 
+  )
+  {
+    $true
+  } else
+  {
+    $false
   }
-  else {
-    $false 
-  }
-  if ($NoUpdate) {
+  if ($NoUpdate)
+  {
     Write-Host "PowerShell is up to date $VersionSummary"
-  }
-  else {
+  } else
+  {
     Write-Host "PowerShell needs to be updated $VersionSummary"
-    if (!(Get-Command -Name pwsh -ErrorAction SilentlyContinue)) {
+    if (!(Get-Command -Name pwsh -ErrorAction SilentlyContinue))
+    {
       winget install --id Microsoft.PowerShell --exact
-    }
-    else {
+    } else
+    {
       Write-Host -ForegroundColor White "Run " -NoNewline
       Write-Host -ForegroundColor Yellow "winget install --id Microsoft.PowerShell --exact"
       EXIT
@@ -448,30 +479,35 @@ function Update-PowerShellCore {
   }
 }
 
-function Update-LocalDefaults ($LocalDefaultsPath, $GlobalDefaults) {
+function Update-LocalDefaults ($LocalDefaultsPath, $GlobalDefaults)
+{
   # TODO see if you can turn this into a function
   # Setup Local Override defaults
-  $TestLocalDefaults = test-path $LocalDefaultsPath
+  $TestLocalDefaults = Test-Path $LocalDefaultsPath
 
-  if (!$TestLocalDefaults) {
+  if (!$TestLocalDefaults)
+  {
     # Create Local Defaults 
     $GlobalDefaults | ConvertTo-Yaml | Set-Content $LocalDefaultsPath -Force -Verbose
     return $GlobalDefaults
-  }
-  else {
+  } else
+  {
     # Load Local Defaults
     $LocalDefaults = (Get-Content $LocalDefaultsPath) | ConvertFrom-Yaml
   
     # Get Keys
-    $LocalKeys = Try {
+    $LocalKeys = Try
+    {
       $LocalDefaults.psobject.properties | Where-Object { $_.Name -eq "Keys" } | Select-Object -ExpandProperty Value
-    }
-    Catch {
+    } Catch
+    {
     }
 
     # Loop through and compare Keys
-    ForEach ($LocalKey in $LocalKeys) {
-      if ($GlobalDefaults[$LocalKey] -ne $LocalDefaults[$LocalKey]) {
+    ForEach ($LocalKey in $LocalKeys)
+    {
+      if ($GlobalDefaults[$LocalKey] -ne $LocalDefaults[$LocalKey])
+      {
         $GlobalDefaults[$LocalKey] = $LocalDefaults[$LocalKey]
       }
     }
@@ -480,3 +516,5 @@ function Update-LocalDefaults ($LocalDefaultsPath, $GlobalDefaults) {
 }
 
 Export-ModuleMember *-*
+
+
