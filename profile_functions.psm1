@@ -464,9 +464,4 @@ function Update-LocalDefaults ($LocalDefaultsPath, $GlobalDefaults) {
   }
 }
 
-Export-ModuleMember *-*
-
-
-
-
-
+Export-ModuleMember -Function * -Alias *

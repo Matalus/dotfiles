@@ -47,7 +47,11 @@ $Global:PSCore = if ($PSVersionTable.PSVersion -gt [version]"7.0.0") {
 }
 
 #region LoadProfileFunctions
-Import-Module "$ProjectRoot\profile_functions.psm1" -Force -ErrorAction SilentlyContinue
+Try{
+  Write-Host -ForegroundColor White "Loading profile_functions: " -NoNewline
+  Import-Module "$ProjectRoot\profile_functions.psm1" -Force -DisableNameChecking -ErrorAction SilentlyContinue
+  Write-Host "done"
+}Catch{}
 #endregion
 
 $LocalDefaultsPath = "$ProjectRoot\local.defaults.yaml"
@@ -92,9 +96,9 @@ $custom_function_list = Get-ChildItem "$RunDir\custom_modules" -Filter *.psm1 -E
 # Load custom functions
 ForEach ($function in $custom_function_list) {
   Try {
-    Write-Host "Loading Module: $($function.Name):" -NoNewline
+    Write-Host "Loading Module: $($function.Name):".PadRight(100).Substring(0,76) -NoNewline
     Import-Module $function.FullName -Force -ErrorAction SilentlyContinue -DisableNameChecking
-    Write-Host -ForegroundColor Green " OK ✅"
+    Write-Host -ForegroundColor Green " loaded. ✅"
   } Catch {
     Write-Host -ForegroundColor Red " Fail ❌"
   }
@@ -233,6 +237,8 @@ if (!$TestHomeDir) {
   $null = New-Item -ItemType Directory $HomeDir
 }
 Set-Location $HomeDir
+
+
 
 
 
