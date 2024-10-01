@@ -3,7 +3,7 @@ return {
   {
     "stevearc/conform.nvim",
     dependencies = {
-      "mason.nvim"
+      "mason.nvim",
     },
     lazy = false,
     event = { "BufWritePre" },
@@ -37,7 +37,6 @@ return {
       default_format_opts = {
         lsp_format = "fallback",
       },
-      -- Set up format-on-save
       -- Customize formatters
       formatters = {
         shfmt = {
@@ -48,14 +47,13 @@ return {
           args = {
             "-NoProfile",
             "-Command",
-            "[Console]::In.ReadToEnd() | Invoke-Formatter -Settings CodeFormattingOTBS",
+            "if(!(Get-Module -ListAvailable PSScriptAnalyzer -ErrorAction SilentlyContinue)){Import-Module '~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PSScriptAnalyzer/*/PSScriptAnalyzer.psd1' -ErrorAction SilentlyContinue}; [Console]::In.ReadToEnd() | Invoke-Formatter -Settings @{Rules = @{PSUseConsistentIndentation=@{IndentationSize=2;Kind='space'};PSPlaceOpenBrace=@{Enable=$true;OnSameLine=$true;}}}",
           },
           codeFormatting = {
             openBraceOnSameLine = true,
           },
           bundle_path = "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices",
           stdin = true,
-
         },
         prettier = {
           prepend_args = { "--bracket-same-line" },
