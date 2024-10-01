@@ -9,8 +9,7 @@ $setAzConfigSplat = @{
   EnableDataCollection         = $false
   WarningAction                = "SilentlyContinue"
 }
-if (Get-Module Az.Accounts)
-{
+if (Get-Module Az.Accounts) {
   $null = Set-AzConfig @setAzConfigSplat
 }
 
@@ -35,4 +34,6 @@ Register-ArgumentCompleter -Native -CommandName az -ScriptBlock {
   Env:\_ARGCOMPLETE_SHELL
 }
 Write-Host -ForegroundColor Green "done"
+
+
 

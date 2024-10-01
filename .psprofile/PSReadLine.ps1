@@ -424,3 +424,5 @@ Set-PSReadLineKeyHandler -Key Alt+a `
 # Set-PSReadLineOption -PromptText '> '
 
 Write-Host -ForegroundColor Green "done"
+
+

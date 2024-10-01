@@ -27,8 +27,7 @@ Write-Host -ForegroundColor White "Loading Profile Functions:" -NoNewline
 Try {
   Import-Module "$ProfileDir\profile_functions.psm1" -Force -ErrorAction SilentlyContinue
   Write-Host -ForegroundColor Green " OK ✅"
-}
-Catch {
+} Catch {
   Write-Host -ForegroundColor Red " Fail ❌"
 }
 
@@ -99,8 +98,7 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
     if ($SymLinkExists) {
       Write-Host -ForegroundColor Green " OK ✅"
       $create_symlink = $false
-    }
-    else {
+    } else {
       $create_symlink = $true # plan to create symlink 
       Write-Host -ForegroundColor Yellow " missing ❌"
       $Contents = Get-ChildItem $SymLinkPath -Recurse -Force -ErrorAction SilentlyContinue
@@ -108,12 +106,11 @@ ForEach ($Symlink in $SymLinks.Symlinks) {
         # attempt to rename dir
         $Leaf = Split-Path -Leaf $SymLinkPath
         $Parent = Split-Path -Parent $SymLinkPath
-        $BackupPath = "$($Parent)\$($Leaf).$(get-date -Format "yyyyddMM-hhmm").BAK"
+        $BackupPath = "$($Parent)\$($Leaf).$(Get-Date -Format "yyyyddMM-hhmm").BAK"
         Write-Host -ForegroundColor Yellow "Backing up current directory: $($SymLinkPath) to: $($BackupPath) 💾"
         # Throw error if data can't be moved to avoid
         Move-Item -Path $SymLinkPath -Destination $BackupPath -Verbose -ErrorAction Stop
-      }
-      else {
+      } else {
         Remove-Item -Path $SymLinkPath -Force -Recurse -Confirm:$false -ErrorAction SilentlyContinue
       }
     }
@@ -146,7 +143,7 @@ if ($TermPaths) {
       Write-Host "Found Settings: $($TermPath.FullName)"
 
       if ($CurrentSettings.defaultProfile -ne $DefaultProfile.guid) {
-        write-host -ForegroundColor Cyan "Updating Default Terminal Profile to: $($DefaultProfile.name) : $($DefaultProfile.guid)"
+        Write-Host -ForegroundColor Cyan "Updating Default Terminal Profile to: $($DefaultProfile.name) : $($DefaultProfile.guid)"
         $CurrentSettings.defaultProfile = $DefaultProfile.guid
         $ChangeCount++
       }
@@ -156,8 +153,7 @@ if ($TermPaths) {
         # check font
         $NFString = if ($TermPath.FullName -match "Preview") { 
           "$($Defaults.nerd_font),$($Defaults.fallback_font)"
-        }
-        else {
+        } else {
           $Defaults.nerd_font
         }
         if ($TermProfile.face -and $TermProfile.face.font -ne $NFString) {
@@ -168,8 +164,7 @@ if ($TermPaths) {
           Write-Host -ForegroundColor Yellow " Patching ⚠️"
           $CurrentSettings.profiles.list += $TermProfile
           $ChangeCount++
-        }
-        else {
+        } else {
           Write-Host -ForegroundColor Green " OK ✅"
         }
       }
@@ -182,8 +177,7 @@ if ($TermPaths) {
         # Export Updated Settings file
         $CurrentSettings | ConvertTo-Json -Depth 10 | Set-Content $TermPath.FullName -Verbose
       }
-    }
-    Catch {
+    } Catch {
     }
   }
 }
@@ -208,8 +202,7 @@ if (!$TestPoshThemesGit) {
     "git pull origin main"
   )
   $GitInvoke | ForEach-Object { Invoke-Expression $_ }
-}
-else {
+} else {
   Set-Location $ThemesDir
   Invoke-Expression "git pull"
 }
@@ -230,8 +223,7 @@ Set-ProfileEnvironment -Variables $POSH_ENV_VARS
 # Set preferred Nerd Font
 Try {
   Set-ConsoleFont -Name $Defaults.nerd_font -Height 17 
-}
-Catch {
+} Catch {
 }
 
 # Cleanup PS Module version of oh-my-posh
@@ -241,8 +233,7 @@ Try {
   #$global:OMP_GLOBAL_SESSIONSTATE = $PSCmdlet.SessionState
   Write-Host "Initializing Oh-My-Posh..."
   Initialize-OhMyPosh
-}
-Catch {
+} Catch {
 }
 
 # Create HomeDir in not exist
@@ -269,3 +260,20 @@ Write-Host -ForegroundColor Yellow @"
 |************************ ATTENTION ! *****************************|
 ====================================================================
 "@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
