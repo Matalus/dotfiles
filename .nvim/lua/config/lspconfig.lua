@@ -92,6 +92,27 @@ return {
       -- options
     },
   },
+  -- Add terraform-ls config
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        terraformls = {
+          filetypes = { "terraform", "tf", "hcl", "tfvars" },
+          settings = {
+            terraform = {
+              format = {
+                enabled = true,
+              },
+              validate = {
+                enabled = true,
+              }
+            }
+          }
+        }
+      }
+    }
+  },
 
   "neovim/nvim-lspconfig",
   dependencies = {

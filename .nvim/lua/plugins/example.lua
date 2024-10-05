@@ -21,12 +21,12 @@ return {
     opts = { use_diagnostic_signs = true },
     dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
-      require("trouble").setup {}
+      require("trouble").setup {
+        auto_open = true,
+        auto_close = true,
+      }
     end,
   },
-
-  -- disable trouble
-  { "folke/trouble.nvim",      enabled = true },
 
   -- override nvim-cmp and add cmp-emoji
   {

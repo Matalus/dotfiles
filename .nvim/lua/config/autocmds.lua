@@ -14,3 +14,17 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     vim.b.autoformat = false
   end,
 }) --
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "*.tf", "*.hcl", "*.tfvars" },
+  callback = function()
+    vim.bo.filetype = "terraform"
+  end,
+})
+-- Auto-wrap for Trouble window
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "Trouble",
+  callback = function()
+    vim.wo.wrap = true -- Enable line wrap
+  end,
+})
