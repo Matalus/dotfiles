@@ -345,6 +345,7 @@ $($remote_last.output)
 }
 
 function Install-ProfileUpdates {
+  $DirContext = $PWD
   Set-Location $env:TERMINAL_PROFILE_ROOT
   Write-Host -ForegroundColor Cyan "Installing Updates"
   Write-Host -ForegroundColor Cyan "Pulling Source Code..."
@@ -355,6 +356,7 @@ function Install-ProfileUpdates {
   $GitInvokes | ForEach-Object { Invoke-Expression $_ }
   Write-Host -ForegroundColor Cyan "Reinitializing..."
   Invoke-Expression "$($env:TERMINAL_PROFILE_ROOT)\install.ps1"
+  Set-Location $DirContext
 }
 
 # TODO set env variables

@@ -1,6 +1,6 @@
 #region VSCode
 # Load Editor Services if VSCode
-if ($Host.Name -match "Visual Studio Code" -and $PSCore) {
+if ($Host.Name -match "Visual Studio Code" -and $PSCore -or $ENV:TERM_PROGRAM -match "vscode") {
     Write-Host "Loading VSCode Profile"
 
     # Create Profile Temp Dirs
