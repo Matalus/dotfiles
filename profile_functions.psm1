@@ -392,7 +392,7 @@ function Initialize-OhMyPosh {
     $env:OMP_THEMES_DIR = [System.Environment]::GetEnvironmentVariable("OMP_THEMES_DIR", "Machine")
   }
   
-  $PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue | Where-Object {
+  $PoshTheme = Get-ChildItem $env:OMP_THEMES_DIR -ErrorAction SilentlyContinue -Filter "*.json" | Where-Object {
     $_.Name -match "$($env:OMP_DEFAULT_PROMPT)\." | Select-Object -First 1
   }
   Try {
